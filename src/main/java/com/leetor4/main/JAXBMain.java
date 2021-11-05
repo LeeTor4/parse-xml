@@ -34,14 +34,14 @@ public class JAXBMain {
 		XSSFSheet sheet = workbook.createSheet("Notas Proprias");
         RelacaoNotasFiscais relacao = new RelacaoNotasFiscais();
         //relacao.relacaoNotasFiscais(diretorio);
-        //relacao.exporaNotasFiscais(relacao.relacaoNotasFiscais(diretorio), workbook, sheet, dest);
+        relacao.exporaNotasFiscais(relacao.relacaoNotasFiscais(diretorio), workbook, sheet, dest);
         
         String cnpj = "";
         String codItem = "";
         String orig = "";
         String cst  = "10";
         String numDoc = "";
-        relacao.getParse().filtrarNotasFiscais(diretorio, dirDest,cnpj,codItem,orig,cst,numDoc);
+        //relacao.getParse().filtrarNotasFiscais(diretorio, dirDest,cnpj,codItem,orig,cst,numDoc);
         
      
 	}

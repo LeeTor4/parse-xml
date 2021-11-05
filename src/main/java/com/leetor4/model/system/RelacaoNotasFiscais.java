@@ -15,8 +15,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.leetor4.handler.ParseNFE;
-import com.leetor4.model.nfe.Icms;
-import com.leetor4.model.nfe.ImpostoNFE;
 import com.leetor4.model.nfe.NotaFiscal;
 import com.leetor4.model.nfe.Produtos;
 
@@ -34,7 +32,7 @@ public class RelacaoNotasFiscais {
 	    data.put(indice, 
 	    new Object[]
 	    {"ID","CHAVE","UF","COD_NF","NAT_OPERAÇÃO","MODELO_DOC","SERIE","NUM_DOC",
-	    "CNPJ_EMITENTE","NOME_EMITENTE",
+	    "CNPJ_EMIT","NOME_EMIT", "CNPJ_DEST","NOME_DEST","IE_DEST",
 	    "NUM_ITEM","COD_ITEM","DESCRIÇAO","NCM","CFOP","ORIG","CST_ICMS","UND_COMERCIAL","QTD_COMERCIAL","VL_UND_COMERCIAL","VL_PRODUTO",
 	    "COD_EAN_TRIB","UND_TRIB","QTD_TRIB","VL_UNID_TRIB","IND_TOT"});		
 		ParseNFE parse = new ParseNFE();
@@ -54,6 +52,9 @@ public class RelacaoNotasFiscais {
 						n.getIdent().getNumDoc() +"|"+ 
 						n.getEmitente().getCnpj() +"|"+ 
 						n.getEmitente().getNome() +"|"+ 
+						n.getDestinatario().getCnpj() +"|"+ 
+						n.getDestinatario().getNome() +"|"+
+						n.getDestinatario().getIe() +"|"+
 				        p.getNumItem() + "|"+ 
 					    p.getCodItem()  +"|"+ 
 				        p.getDescricao()+"|"+
@@ -74,13 +75,14 @@ public class RelacaoNotasFiscais {
 				      
 				  
 				        
-				  data.put(indice, 
+				data.put(indice, 
 						  
-			        new Object[]{id, n.getIdent().getChaveeletronica(),n.getIdent().getCodigoUF(),n.getIdent().getCodigoNF(),n.getIdent().getNaturezaOperacao(),
-			        		n.getIdent().getModeloDoc(),n.getIdent().getSerie(),n.getIdent().getNumDoc() ,n.getEmitente().getCnpj(),n.getEmitente().getNome(),
-			        		 p.getNumItem(), p.getCodItem(), p.getDescricao(), p.getNcm(),p.getCfop(), p.getOrig(), p.getCst() ,p.getUndComercial(), 
-			        		 p.getQtdComercial().replace(".",","), p.getVlUnComerial().replace(".",","), p.getVlProduto().replace(".",","),p.getCodEanTrib(), p.getUndTrib().replace(".",","), p.getQtdTrib().replace(".",","),
-			        		 p.getVlUnTrib().replace(".",","), p.getIndTot()});
+		        new Object[]{id, n.getIdent().getChaveeletronica(),n.getIdent().getCodigoUF(),n.getIdent().getCodigoNF(),n.getIdent().getNaturezaOperacao(),
+		        		 n.getIdent().getModeloDoc(),n.getIdent().getSerie(),n.getIdent().getNumDoc() ,n.getEmitente().getCnpj(),n.getEmitente().getNome(),
+		        		 n.getDestinatario().getCnpj(),n.getDestinatario().getNome(),n.getDestinatario().getIe(),
+		        		 p.getNumItem(), p.getCodItem(), p.getDescricao(), p.getNcm(),p.getCfop(), p.getOrig(), p.getCst() ,p.getUndComercial(), 
+		        		 p.getQtdComercial().replace(".",","), p.getVlUnComerial().replace(".",","), p.getVlProduto().replace(".",","),p.getCodEanTrib(), p.getUndTrib().replace(".",","), p.getQtdTrib().replace(".",","),
+		        		 p.getVlUnTrib().replace(".",","), p.getIndTot()});
 			}
 			
 

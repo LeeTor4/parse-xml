@@ -18,6 +18,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
 import com.leetor4.model.nfe.CstIcms;
+import com.leetor4.model.nfe.Destinatario;
 import com.leetor4.model.nfe.Emitente;
 import com.leetor4.model.nfe.GrupoIcms;
 import com.leetor4.model.nfe.ICMSPartilha;
@@ -59,9 +60,9 @@ public class ParseNFE {
 	private static final String GRP_ICMS51 = "ICMS51";
 	private static final String GRP_ICMS60 = "ICMS60";
 	private static final String GRP_ICMS70 = "ICMS70";
-	private static final String GRP_ICMS90 = "ICMS90";
+	private static final String GRP_ICMS90   = "ICMS90";
 	private static final String GRP_ICMSPART = "ICMSPART";
-	private static final String GRP_ICMSST = "ICMSST";
+	private static final String GRP_ICMSST   = "ICMSST";
 
 	private static final String GRP_ICMSSN101 = "ICMSSN101";
 	private static final String GRP_ICMSSN102 = "ICMSSN102";
@@ -138,9 +139,17 @@ public class ParseNFE {
 			emit.setCnpj(nfe.getNFe().getInfNFe().getEmit().getCNPJ());
 			emit.setNome(nfe.getNFe().getInfNFe().getEmit().getXNome());
 
+			Destinatario dest = new Destinatario();
+			
+			dest.setCnpj(nfe.getNFe().getInfNFe().getDest().getCNPJ());
+			dest.setNome(nfe.getNFe().getInfNFe().getDest().getXNome());
+			dest.setIe(nfe.getNFe().getInfNFe().getDest().getIE());	
+			
+			
 			nf.setIdent(ident);
 			nf.setEmitente(emit);
-
+			nf.setDestinatario(dest);
+			
 			for (Det det : nfe.getNFe().getInfNFe().getDet()) {
 				Produtos prod = new Produtos();
 				ImpostoNFE imp = new ImpostoNFE();
@@ -168,9 +177,6 @@ public class ParseNFE {
 				for (Field field : fields) {
 
 						Icms   grp_icms   = impostoICMS(field.getName(), det,imp);
-						
-						
-
 						if(!grp_icms.getCstA().isBlank()) {
 							prod.setOrig(grp_icms.getCstA());
 						}
@@ -223,8 +229,16 @@ public class ParseNFE {
 			emit.setCnpj(nfe.getInfNFe().getEmit().getCNPJ());
 			emit.setNome(nfe.getInfNFe().getEmit().getXNome());
 
+            Destinatario dest = new Destinatario();
+			
+			dest.setCnpj(nfe.getInfNFe().getDest().getCNPJ());
+			dest.setNome(nfe.getInfNFe().getDest().getXNome());
+			dest.setIe(nfe.getInfNFe().getDest().getIE());	
+			
+			
 			nf.setIdent(ident);
 			nf.setEmitente(emit);
+			nf.setDestinatario(dest);
 
 			for (Det det : nfe.getInfNFe().getDet()) {
 				Produtos prod = new Produtos();
