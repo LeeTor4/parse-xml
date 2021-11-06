@@ -6,6 +6,8 @@ public class Rastreamento {
 	private String qtdLote;
 	private String dtFab;
 	private String dtVal;
+	
+	
 	public String getNumLote() {
 		return numLote;
 	}

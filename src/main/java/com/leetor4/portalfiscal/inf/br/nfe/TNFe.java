@@ -12820,12 +12820,24 @@ public class TNFe {
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
                 "icms",
+                "pis",
+                "pisst",
+                "cofins",
                 "content"
             })
             public static class Imposto {
 
                 @XmlElement(name = "ICMS", required = true)
             	protected TNFe.InfNFe.Det.Imposto.ICMS icms;
+                
+                @XmlElement(name = "PIS", required = true)
+            	protected TNFe.InfNFe.Det.Imposto.PIS pis;
+                
+                @XmlElement(name = "PISST", required = true)
+            	protected TNFe.InfNFe.Det.Imposto.PISST pisst;
+                
+                @XmlElement(name = "COFINS", required = true)
+            	protected TNFe.InfNFe.Det.Imposto.COFINS cofins;
             	
                 @XmlElementRefs({
                     @XmlElementRef(name = "II", namespace = "http://www.portalfiscal.inf.br/nfe", type = JAXBElement.class, required = false),
@@ -12846,9 +12858,33 @@ public class TNFe {
                 	return icms;
                 }
                 
-                
                 public void setIcms(TNFe.InfNFe.Det.Imposto.ICMS icms){
                 	this.icms = icms;
+                }
+                
+                public TNFe.InfNFe.Det.Imposto.PIS getPis(){
+                	return pis;
+                }
+                
+                public void setPis(TNFe.InfNFe.Det.Imposto.PIS pis){
+                	this.pis = pis;
+                }
+                
+                public TNFe.InfNFe.Det.Imposto.PISST getPisSt(){
+                	return pisst;
+                }
+                
+                public void setPis(TNFe.InfNFe.Det.Imposto.PISST pisst){
+                	this.pisst = pisst;
+                }
+                
+                public TNFe.InfNFe.Det.Imposto.COFINS getCofins(){
+                	return cofins;
+                }
+                
+                
+                public void setCofins(TNFe.InfNFe.Det.Imposto.COFINS cofins){
+                	this.cofins = cofins;
                 }
                 /**
                  * Obtém o restante do modelo do conteúdo. 

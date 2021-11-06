@@ -11,6 +11,8 @@ public class Produtos {
 	 private String cfop;
 	 private String orig;
 	 private String cst;
+	 private String cstPis;
+	 private String cstCofins;
 	 private String undComercial;
 	 private String qtdComercial;
 	 private String vlUnComerial;
@@ -98,6 +100,22 @@ public class Produtos {
 
 	public void setCst(String cst) {
 		this.cst = cst;
+	}
+    
+	public String getCstPis() {
+		return cstPis;
+	}
+
+	public void setCstPis(String cstPis) {
+		this.cstPis = cstPis;
+	}
+    
+	public String getCstCofins() {
+		return cstCofins;
+	}
+
+	public void setCstCofins(String cstCofins) {
+		this.cstCofins = cstCofins;
 	}
 
 	public String getUndComercial() {

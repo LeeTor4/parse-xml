@@ -37,9 +37,9 @@ public class JAXBMain {
         relacao.exporaNotasFiscais(relacao.relacaoNotasFiscais(diretorio), workbook, sheet, dest);
         
         String cnpj = "";
-        String codItem = "";
+        String codItem = "38462";
         String orig = "";
-        String cst  = "10";
+        String cst  = "";
         String numDoc = "";
         //relacao.getParse().filtrarNotasFiscais(diretorio, dirDest,cnpj,codItem,orig,cst,numDoc);
         
