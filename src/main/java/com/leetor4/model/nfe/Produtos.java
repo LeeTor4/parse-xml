@@ -11,6 +11,16 @@ public class Produtos {
 	 private String cfop;
 	 private String orig;
 	 private String cst;
+	 private String modBc;
+	 private String vlBc;
+	 private String aliqIcms;
+	 private String vlIcms;
+	 private String modBcST;
+	 private String vlBcST;
+	 private String vlBcSTRet;
+	 private String aliqIcmsST;
+	 private String vlIcmsST;
+	 private String vlIcmsSTRet;
 	 private String cstPis;
 	 private String cstCofins;
 	 private String undComercial;
@@ -102,6 +112,70 @@ public class Produtos {
 		this.cst = cst;
 	}
     
+	public String getModBc() {
+		return modBc;
+	}
+
+	public void setModBc(String modBc) {
+		this.modBc = modBc;
+	}
+    
+	public String getVlBc() {
+		return vlBc;
+	}
+
+	public void setVlBc(String vlBc) {
+		this.vlBc = vlBc;
+	}
+
+	public String getAliqIcms() {
+		return aliqIcms;
+	}
+
+	public void setAliqIcms(String aliqIcms) {
+		this.aliqIcms = aliqIcms;
+	}
+
+	public String getVlIcms() {
+		return vlIcms;
+	}
+
+	public void setVlIcms(String vlIcms) {
+		this.vlIcms = vlIcms;
+	}
+    
+	public String getModBcST() {
+		return modBcST;
+	}
+
+	public void setModBcST(String modBcST) {
+		this.modBcST = modBcST;
+	}
+
+	public String getVlBcST() {
+		return vlBcST;
+	}
+
+	public void setVlBcST(String vlBcST) {
+		this.vlBcST = vlBcST;
+	}
+
+	public String getAliqIcmsST() {
+		return aliqIcmsST;
+	}
+
+	public void setAliqIcmsST(String aliqIcmsST) {
+		this.aliqIcmsST = aliqIcmsST;
+	}
+
+	public String getVlIcmsST() {
+		return vlIcmsST;
+	}
+
+	public void setVlIcmsST(String vlIcmsST) {
+		this.vlIcmsST = vlIcmsST;
+	}
+
 	public String getCstPis() {
 		return cstPis;
 	}
@@ -205,9 +279,25 @@ public class Produtos {
 	public void setImps(ImpostoNFE imps) {
 		this.imps = imps;
 	}
+
+	public String getVlBcSTRet() {
+		return vlBcSTRet;
+	}
+
+	public void setVlBcSTRet(String vlBcSTRet) {
+		this.vlBcSTRet = vlBcSTRet;
+	}
+
+	public String getVlIcmsSTRet() {
+		return vlIcmsSTRet;
+	}
+
+	public void setVlIcmsSTRet(String vlIcmsSTRet) {
+		this.vlIcmsSTRet = vlIcmsSTRet;
+	}
+
+    
  
-    public String addOrig(ImpostoNFE imps) {
-    	return imps.getIcms().getCstA();
-    }
+    
 	
 }

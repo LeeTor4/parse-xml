@@ -179,7 +179,12 @@ public class ImpostoICMS {
 	private Icms getIcms00(Det det, Object obj1) {
 		Icms00 grupo00 = (Icms00) obj1;
 		CstIcms cstIcms = getCstIcms00(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
+		grupo00.setCst(cstIcms);
+		grupo00.setModBC(cstIcms.getmBc());
+		grupo00.setvBC(cstIcms.getVlBc());
+		grupo00.setAliqImp(cstIcms.getAliqIcms());
+		grupo00.setvICMS(cstIcms.getVlIcms());
 		tipo.setIcms00(grupo00);
 		return tipo;
 	}
@@ -187,7 +192,7 @@ public class ImpostoICMS {
 	private Icms getIcms10(Det det, Object obj2) {
 		Icms10 grupo10 = (Icms10) obj2;
 		CstIcms cstIcms = getCstIcms10(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcms10(grupo10);
 		return tipo;
 	}
@@ -195,7 +200,7 @@ public class ImpostoICMS {
 	private Icms getIcms20(Det det, Object obj3) {
 		Icms20 grupo20 = (Icms20) obj3;
 		CstIcms cstIcms = getCstIcms20(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcms20(grupo20);
 		return tipo;
 	}
@@ -203,7 +208,7 @@ public class ImpostoICMS {
 	private Icms getIcms30(Det det, Object obj4) {
 		Icms30 grupo30 = (Icms30) obj4;
 		CstIcms cstIcms = getCstIcms30(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcms30(grupo30);
 		return tipo;
 	}
@@ -211,7 +216,7 @@ public class ImpostoICMS {
 	private Icms getIcms40_41_50(Det det, Object obj5) {
 		Icms40_41_50 grupo40_41_50 = (Icms40_41_50) obj5;
 		CstIcms cstIcms = getCstIcms40(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcms40_41_50(grupo40_41_50);
 		return tipo;
 	}
@@ -219,7 +224,7 @@ public class ImpostoICMS {
 	private Icms getIcms51(Det det, Object obj6) {
 		Icms51 grupo51 = (Icms51) obj6;
 		CstIcms cstIcms = getCstIcms51(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcms51(grupo51);
 		return tipo;
 	}
@@ -227,7 +232,10 @@ public class ImpostoICMS {
 	private Icms getIcms60(Det det, Object obj7) {
 		Icms60 grupo60 = (Icms60) obj7;
 		CstIcms cstIcms = getCstIcms60(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
+		grupo60.setCst(cstIcms);
+		grupo60.setvBCSTRet(cstIcms.getVlBcSTRet());
+		grupo60.setvICMSSTRet(cstIcms.getVlIcmsSTRet());
 		tipo.setIcms60(grupo60);
 		return tipo;
 	}
@@ -235,7 +243,7 @@ public class ImpostoICMS {
 	private Icms getIcms70(Det det, Object obj8) {
 		Icms70 grupo70 = (Icms70) obj8;
 		CstIcms cstIcms = getCstIcms70(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcms70(grupo70);
 		return tipo;
 	}
@@ -243,7 +251,18 @@ public class ImpostoICMS {
 	private Icms getIcms90(Det det, Object obj9) {
 		Icms90 grupo90 = (Icms90) obj9;
 		CstIcms cstIcms = getCstIcms90(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
+		grupo90.setCst(cstIcms);
+		grupo90.setModBC(cstIcms.getmBc());
+		grupo90.setvBC(cstIcms.getVlBc());
+		grupo90.setAliqICMS(cstIcms.getAliqIcms());
+		grupo90.setvICMS(cstIcms.getVlIcms());
+		
+		grupo90.setModBCST(cstIcms.getmBcST());
+		grupo90.setvBCST(cstIcms.getVlBcST());
+		grupo90.setAliqICMSST(cstIcms.getAliqIcmsST());
+		grupo90.setvICMSST(cstIcms.getVlIcmsST());
+		
 		tipo.setIcms90(grupo90);
 		return tipo;
 	}
@@ -251,7 +270,7 @@ public class ImpostoICMS {
 	private Icms getIcmsPartilha(Det det, Object obj10) {
 		ICMSPartilha grupoPartilha = (ICMSPartilha) obj10;
 		CstIcms cstIcms = getCstIcmsPart(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcmsPartilha(grupoPartilha);
 		return tipo;
 	}
@@ -259,7 +278,7 @@ public class ImpostoICMS {
 	private Icms getIcmsSt(Det det, Object obj10) {
 		IcmsSt grupoIcmsSt = (IcmsSt) obj10;
 		CstIcms cstIcms = getCstIcmsSt(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcmsSt(grupoIcmsSt);
 		return tipo;
 	}
@@ -267,7 +286,10 @@ public class ImpostoICMS {
 	private Icms getIcmsSN101(Det det, Object obj11) {
 		IcmsCSOSN101 grupoSN = (IcmsCSOSN101) obj11;
 		CstIcms cstIcms = getCstIcmsSN101(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
+		grupoSN.setCst(cstIcms);
+		grupoSN.setAliqpCredSN(cstIcms.getAliqCredSN());
+		grupoSN.setvCredICMSSN(cstIcms.getvCredICMSSN());
 		tipo.setIcmsCSOSN101(grupoSN);
 		return tipo;
 	}
@@ -276,7 +298,7 @@ public class ImpostoICMS {
 	private Icms getIcmsSN102_103_300_400(Det det, Object obj12) {
 		IcmsCSOSN102_103_300_400 grupoSN = (IcmsCSOSN102_103_300_400) obj12;
 		CstIcms cstIcms = getCstIcmsSN102_103_300_400(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcmsCSOSN102_103_300_400(grupoSN);
 		return tipo;
 	}
@@ -284,7 +306,7 @@ public class ImpostoICMS {
 	private Icms getIcmsSN201(Det det, Object obj13) {
 		IcmsCSOSN201 grupoSN = (IcmsCSOSN201) obj13;
 		CstIcms cstIcms = getCstIcmsSN201(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcmsCSOSN201(grupoSN);
 		return tipo;
 	}
@@ -292,7 +314,7 @@ public class ImpostoICMS {
 	private Icms getIcmsSN202_203(Det det, Object obj14) {
 		IcmsCSOSN202_203 grupoSN = (IcmsCSOSN202_203) obj14;
 		CstIcms cstIcms = getCstIcmsSN202_203(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcmsCSOSN102_203(grupoSN);
 		return tipo;
 	}
@@ -300,7 +322,7 @@ public class ImpostoICMS {
 	private Icms getIcmsSN500(Det det, Object obj15) {
 		IcmsCSOSN500 grupoSN = (IcmsCSOSN500) obj15;
 		CstIcms cstIcms = getCstIcmsSN500(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcmsCSOSN500(grupoSN);
 		return tipo;
 	}
@@ -308,7 +330,7 @@ public class ImpostoICMS {
 	private Icms getIcmsSN900(Det det, Object obj16) {
 		IcmsCSOSN900 grupoSN = (IcmsCSOSN900) obj16;
 		CstIcms cstIcms = getCstIcmsSN900(det);
-		Icms tipo = new Icms(cstIcms.getCstA(), cstIcms.getCstB());
+		Icms tipo = new Icms();
 		tipo.setIcmsCSOSN900(grupoSN);
 		return tipo;
 	}
@@ -318,9 +340,17 @@ public class ImpostoICMS {
 		if (det.getImposto().getIcms().getICMS00() == null) {
 			cst.setCstA("");
 			cst.setCstB("");
+			cst.setmBc("");
+			cst.setVlBc("");
+			cst.setAliqIcms("");
+			cst.setVlIcms("");
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMS00().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMS00().getCST());
+			cst.setmBc(det.getImposto().getIcms().getICMS00().getModBC());
+			cst.setVlBc(det.getImposto().getIcms().getICMS00().getVBC());
+			cst.setAliqIcms(det.getImposto().getIcms().getICMS00().getPICMS());
+			cst.setVlIcms(det.getImposto().getIcms().getICMS00().getVICMS());
 		}
 		return cst;
 	}
@@ -330,9 +360,23 @@ public class ImpostoICMS {
 		if (det.getImposto().getIcms().getICMS10() == null) {
 			cst.setCstA("");
 			cst.setCstB("");
+			cst.setmBc("");
+			cst.setVlBc("");
+			cst.setAliqIcms("");
+			cst.setVlIcms("");
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMS10().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMS10().getCST());
+			
+			cst.setmBc(det.getImposto().getIcms().getICMS10().getModBC());
+			cst.setVlBc(det.getImposto().getIcms().getICMS10().getVBC());
+			cst.setAliqIcms(det.getImposto().getIcms().getICMS10().getPICMS());
+			cst.setVlIcms(det.getImposto().getIcms().getICMS10().getVICMS());
+			
+			cst.setmBcST(det.getImposto().getIcms().getICMS10().getModBCST());
+			cst.setVlBcST(det.getImposto().getIcms().getICMS10().getVBCST());
+			cst.setAliqIcmsST(det.getImposto().getIcms().getICMS10().getPICMSST());
+			cst.setVlIcmsST(det.getImposto().getIcms().getICMS10().getVICMSST());
 		}
 		return cst;
 	}
@@ -390,9 +434,14 @@ public class ImpostoICMS {
 		if (det.getImposto().getIcms().getICMS60() == null) {
 			cst.setCstA("");
 			cst.setCstB("");
+			cst.setVlBcSTRet("");
+			cst.setVlIcmsSTRet("");;
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMS60().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMS60().getCST());
+			cst.setVlBcSTRet(det.getImposto().getIcms().getICMS60().getVBCSTRet());
+			cst.setVlIcmsSTRet(det.getImposto().getIcms().getICMS60().getVICMSSTRet());
+			
 		}
 		return cst;
 	}
@@ -414,10 +463,22 @@ public class ImpostoICMS {
 		if (det.getImposto().getIcms().getICMS90() == null) {
 			cst.setCstA("");
 			cst.setCstB("");
+			cst.setmBc("");
+			cst.setVlBc("");
+			cst.setAliqIcms("");
+			cst.setVlIcms("");
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMS90().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMS90().getCST());
+			cst.setmBc(det.getImposto().getIcms().getICMS90().getModBC());
+			cst.setVlBc(det.getImposto().getIcms().getICMS90().getVBC());
+			cst.setAliqIcms(det.getImposto().getIcms().getICMS90().getPICMS());
+			cst.setVlIcms(det.getImposto().getIcms().getICMS90().getVICMS());
 			
+			cst.setmBcST(det.getImposto().getIcms().getICMS90().getModBCST());
+			cst.setVlBcST(det.getImposto().getIcms().getICMS90().getVBCST());
+			cst.setAliqIcmsST(det.getImposto().getIcms().getICMS90().getPICMSST());
+			cst.setVlIcmsST(det.getImposto().getIcms().getICMS90().getVICMSST());
 		}
 		return cst;
 	}
@@ -451,10 +512,14 @@ public class ImpostoICMS {
 		if (det.getImposto().getIcms().getICMSSN101() == null) {
 			cst.setCstA("");
 			cst.setCstB("");
+			cst.setAliqCredSN("");
+			cst.setvCredICMSSN("");		
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMSSN101().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMSSN101().getCSOSN());
-		}
+			cst.setAliqCredSN(det.getImposto().getIcms().getICMSSN101().getPCredSN());
+			cst.setvCredICMSSN(det.getImposto().getIcms().getICMSSN101().getVCredICMSSN());
+	    }
 		return cst;
 	}
 

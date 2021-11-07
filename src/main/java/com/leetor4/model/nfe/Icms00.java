@@ -25,21 +25,43 @@ public class Icms00 {
 		return cst;
 	}
 
+	public void setCst(CstIcms cst) {
+		this.cst = cst;
+	}
+
 	public String getModBC() {
 		return modBC;
+	}
+
+	public void setModBC(String modBC) {
+		this.modBC = modBC;
 	}
 
 	public String getvBC() {
 		return vBC;
 	}
 
+	public void setvBC(String vBC) {
+		this.vBC = vBC;
+	}
+
 	public String getAliqImp() {
 		return aliqImp;
+	}
+
+	public void setAliqImp(String aliqImp) {
+		this.aliqImp = aliqImp;
 	}
 
 	public String getvICMS() {
 		return vICMS;
 	}
+
+	public void setvICMS(String vICMS) {
+		this.vICMS = vICMS;
+	}
+
+    
 	
 	
 	

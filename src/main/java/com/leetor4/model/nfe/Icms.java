@@ -23,18 +23,12 @@ public class Icms {
 	private IcmsCSOSN202_203 icmsCSOSN102_203 = new IcmsCSOSN202_203();
 	private IcmsCSOSN500 icmsCSOSN500 = new IcmsCSOSN500();
 	private IcmsCSOSN900 icmsCSOSN900 = new IcmsCSOSN900();
-
-	private String cstA;
-	private String cstB;
+	
 
 	public Icms() {
 
 	}
 
-	public Icms(String cstA, String cstB) {
-		this.cstA = cstA;
-		this.cstB = cstB;
-	}
 
 	public Enum<GrupoIcms> getGrupoIcms() {
 		return grupoIcms;
@@ -132,22 +126,6 @@ public class Icms {
 		this.icmsTotal = icmsTotal;
 	}
 
-	public void setCstA(String cstA) {
-		this.cstA = cstA;
-	}
-
-	public void setCstB(String cstB) {
-		this.cstB = cstB;
-	}
-
-	public String getCstA() {
-		return cstA;
-	}
-
-	public String getCstB() {
-		return cstB;
-	}
-
 	public IcmsSt getIcmsSt() {
 		return icmsSt;
 	}
@@ -204,9 +182,5 @@ public class Icms {
 		this.icmsCSOSN900 = icmsCSOSN900;
 	}
 
-	@Override
-	public String toString() {
 	
-		return this.cstA.concat(this.cstB);
-	}
 }

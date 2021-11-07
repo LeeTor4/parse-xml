@@ -33,7 +33,7 @@ public class RelacaoNotasFiscais {
 	    new Object[]
 	    {"ID","CHAVE","UF","COD_NF","NAT_OPERAÇÃO","MODELO_DOC","SERIE","NUM_DOC",
 	    "CNPJ_EMIT","NOME_EMIT", "CNPJ_DEST","NOME_DEST","IE_DEST",
-	    "NUM_ITEM","COD_ITEM","DESCRIÇAO","NCM","CFOP","ORIG","CST_ICMS","CST_PIS","CST_COFINS","UND_COMERCIAL","QTD_COMERCIAL","VL_UND_COMERCIAL","VL_PRODUTO",
+	    "NUM_ITEM","COD_ITEM","DESCRIÇAO","NCM","CFOP","ORIG","CST_ICMS","MOD_BC","VL_BC","ALIQ_ICMS","VL_ICMS","MOD_BC_ST","CST_PIS","CST_COFINS","UND_COMERCIAL","QTD_COMERCIAL","VL_UND_COMERCIAL","VL_PRODUTO",
 	    "COD_EAN_TRIB","UND_TRIB","QTD_TRIB","VL_UNID_TRIB","IND_TOT","NUM_LOTE","QTDE_LOTE","FAB_LOTE","VAL_LOTE",
 	    "VL_BC","VL_ICMS","VL_ICMS_DESON","VL_FCP","VL_BC_CST","VL_ST","VL_FCP_ST","VL_FCP_ST_RET","VL_PROD","VL_FRETE","VL_SEG","VL_DESC","VL_II",
 	    "VL_IPI","VL_IPI_DEVOL","VL_PIS","VL_COFINS","VL_OUTROS","VL_NF"});		
@@ -43,63 +43,64 @@ public class RelacaoNotasFiscais {
 			for(Produtos p: n.getProds()){
 				id++;
 				indice++;
-				System.out.println(
-						id + "|"+
-						n.getIdent().getChaveeletronica() +"|"+ 
-						n.getIdent().getCodigoUF() +"|"+ 
-						n.getIdent().getCodigoNF() +"|"+ 
-						n.getIdent().getNaturezaOperacao() +"|"+ 
-						n.getIdent().getModeloDoc() +"|"+ 
-						n.getIdent().getSerie() +"|"+
-						n.getIdent().getNumDoc() +"|"+ 
-						n.getEmitente().getCnpj() +"|"+ 
-						n.getEmitente().getNome() +"|"+ 
-						n.getDestinatario().getCnpj() +"|"+ 
-						n.getDestinatario().getNome() +"|"+
-						n.getDestinatario().getIe() +"|"+
-				        p.getNumItem() + "|"+ 
-					    p.getCodItem()  +"|"+ 
-				        p.getDescricao()+"|"+
-				        p.getNcm() +"|"+ 
-				        p.getCfop() +"|"+
-				        p.getOrig() +"|"+
-				        p.getCst() +"|"+
-				        p.getCstPis() +"|"+
-				        p.getCstCofins() +"|"+
-				        p.getUndComercial() +"|"+
-				        p.getQtdComercial() +"|"+
-				        p.getVlUnComerial()+"|"+
-				        p.getVlProduto()+"|"+
-				        p.getCodEanTrib()+"|"+
-				        p.getUndTrib() +"|"+
-				        p.getQtdTrib() +"|"+
-				        p.getVlUnTrib() +"|"+
-				        p.getIndTot() +"|"+
-				        p.getRastro().getNumLote()+"|"+
-				        p.getRastro().getQtdLote()+"|"+
-				        p.getRastro().getDtFab()+"|"+
-				        p.getRastro().getDtVal()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlBc()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlIcms()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlIcmsDeson()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlFCP()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlBCST()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlST()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlFCPST()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlFCPSTRet()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlProd()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlFrete()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlSeg()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlDesc()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlII()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlIPI()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlIPIDevol()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlPIS()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlCOFINS()+"|"+
-				        n.getTotal().getIcmsTot().getVlOutro()+"|"+ 
-				        n.getTotal().getIcmsTot().getVlNF()
-				        
-				      );
+//				System.out.println(
+//						id + "|"+
+//						n.getIdent().getChaveeletronica() +"|"+ 
+//						n.getIdent().getCodigoUF() +"|"+ 
+//						n.getIdent().getCodigoNF() +"|"+ 
+//						n.getIdent().getNaturezaOperacao() +"|"+ 
+//						n.getIdent().getModeloDoc() +"|"+ 
+//						n.getIdent().getSerie() +"|"+
+//						n.getIdent().getNumDoc() +"|"+ 
+//						n.getEmitente().getCnpj() +"|"+ 
+//						n.getEmitente().getNome() +"|"+ 
+//						n.getDestinatario().getCnpj() +"|"+ 
+//						n.getDestinatario().getNome() +"|"+
+//						n.getDestinatario().getIe() +"|"+
+//				        p.getNumItem() + "|"+ 
+//					    p.getCodItem()  +"|"+ 
+//				        p.getDescricao()+"|"+
+//				        p.getNcm() +"|"+ 
+//				        p.getCfop() +"|"+
+//				        p.getOrig() +"|"+
+//				        p.getCst() +"|"+
+//				        p.getModBc() +"|"+
+//				        p.getCstPis() +"|"+
+//				        p.getCstCofins() +"|"+
+//				        p.getUndComercial() +"|"+
+//				        p.getQtdComercial() +"|"+
+//				        p.getVlUnComerial()+"|"+
+//				        p.getVlProduto()+"|"+
+//				        p.getCodEanTrib()+"|"+
+//				        p.getUndTrib() +"|"+
+//				        p.getQtdTrib() +"|"+
+//				        p.getVlUnTrib() +"|"+
+//				        p.getIndTot() +"|"+
+//				        p.getRastro().getNumLote()+"|"+
+//				        p.getRastro().getQtdLote()+"|"+
+//				        p.getRastro().getDtFab()+"|"+
+//				        p.getRastro().getDtVal()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlBc()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlIcms()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlIcmsDeson()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlFCP()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlBCST()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlST()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlFCPST()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlFCPSTRet()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlProd()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlFrete()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlSeg()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlDesc()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlII()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlIPI()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlIPIDevol()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlPIS()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlCOFINS()+"|"+
+//				        n.getTotal().getIcmsTot().getVlOutro()+"|"+ 
+//				        n.getTotal().getIcmsTot().getVlNF()
+//				        
+//				      );
 				data.put(indice, 
 						  
 		        new Object[]{id, n.getIdent().getChaveeletronica(),
@@ -114,14 +115,26 @@ public class RelacaoNotasFiscais {
 		        		 n.getDestinatario().getCnpj(),
 		        		 n.getDestinatario().getNome(),
 		        		 n.getDestinatario().getIe(),
-		        		 p.getNumItem(), p.getCodItem(),
-		        		 p.getDescricao(), p.getNcm(),
-		        		 p.getCfop(), p.getOrig(),
-		        		 p.getCst(), p.getCstPis() ,p.getCstCofins(),p.getUndComercial(), 
+		        		 p.getNumItem(), 
+		        		 p.getCodItem(),
+		        		 p.getDescricao(),
+		        		 p.getNcm(),
+		        		 p.getCfop(), 
+		        		 p.getOrig(),
+		        		 p.getCst(),
+		        		 p.getModBc(),
+		        		 (p.getVlBc()==null?"":p.getVlBc().replace(".",",")),
+		        		 (p.getAliqIcms()==null?"":p.getAliqIcms().replace(".",",")),
+		        		 (p.getVlIcms()==null?"":p.getVlIcms().replace(".",",")),
+		        		 p.getModBcST(),
+		        		 p.getCstPis() ,
+		        		 p.getCstCofins(),
+		        		 p.getUndComercial(), 
 		        		 p.getQtdComercial().replace(".",","),
 		        		 p.getVlUnComerial().replace(".",","),
 		        		 p.getVlProduto().replace(".",","),
-		        		 p.getCodEanTrib(), p.getUndTrib().replace(".",","), 
+		        		 p.getCodEanTrib(), 
+		        		 p.getUndTrib().replace(".",","), 
 		        		 p.getQtdTrib().replace(".",","),
 		        		 p.getVlUnTrib().replace(".",","), 
 		        		 p.getIndTot(), 
@@ -132,22 +145,22 @@ public class RelacaoNotasFiscais {
 		        		 n.getTotal().getIcmsTot().getVlBc().replace(".",","),
  				         n.getTotal().getIcmsTot().getVlIcms().replace(".",","),
  				         n.getTotal().getIcmsTot().getVlIcmsDeson().replace(".",","),
- 				         n.getTotal().getIcmsTot().getVlFCP().replace(".",","),
+ 				         (n.getTotal().getIcmsTot().getVlFCP() == null ?"": n.getTotal().getIcmsTot().getVlFCP().replace(".",",")),
  				         n.getTotal().getIcmsTot().getVlBCST().replace(".",","),
  				         n.getTotal().getIcmsTot().getVlST().replace(".",","), 
- 				         n.getTotal().getIcmsTot().getVlFCPST().replace(".",","), 
- 				         n.getTotal().getIcmsTot().getVlFCPSTRet().replace(".",","), 
- 				         n.getTotal().getIcmsTot().getVlProd().replace(".",","), 
+ 				         (n.getTotal().getIcmsTot().getVlFCPST() == null?"": n.getTotal().getIcmsTot().getVlFCPST().replace(".",",")), 
+ 				         (n.getTotal().getIcmsTot().getVlFCPSTRet() == null?"": n.getTotal().getIcmsTot().getVlFCPSTRet().replace(".",",")), 
+ 				         (n.getTotal().getIcmsTot().getVlProd()==null?"":n.getTotal().getIcmsTot().getVlProd().replace(".",",")), 
  				         n.getTotal().getIcmsTot().getVlFrete().replace(".",","), 
  				         n.getTotal().getIcmsTot().getVlSeg().replace(".",","), 
  				         n.getTotal().getIcmsTot().getVlDesc().replace(".",","), 
  				         n.getTotal().getIcmsTot().getVlII().replace(".",","), 
  				         (n.getTotal().getIcmsTot().getVlIPI() == null ? "" : n.getTotal().getIcmsTot().getVlIPI().replace(".",",")), 
- 				         n.getTotal().getIcmsTot().getVlIPIDevol().replace(".",","), 
- 				         n.getTotal().getIcmsTot().getVlPIS().replace(".",","), 
- 				         n.getTotal().getIcmsTot().getVlCOFINS().replace(".",","),
- 				         n.getTotal().getIcmsTot().getVlOutro().replace(".",","), 
- 				         n.getTotal().getIcmsTot().getVlNF().replace(".",",")});
+ 				         (n.getTotal().getIcmsTot().getVlIPIDevol()==null?"": n.getTotal().getIcmsTot().getVlIPIDevol().replace(".",",")), 
+ 				         (n.getTotal().getIcmsTot().getVlPIS()==null?"":n.getTotal().getIcmsTot().getVlPIS().replace(".",",")), 
+ 				         (n.getTotal().getIcmsTot().getVlCOFINS().replace(".",",")),
+ 				         (n.getTotal().getIcmsTot().getVlOutro()==null?"":n.getTotal().getIcmsTot().getVlOutro().replace(".",",")), 
+ 				         (n.getTotal().getIcmsTot().getVlNF()==null?"":n.getTotal().getIcmsTot().getVlNF().replace(".",","))});
 			}
 			
 
