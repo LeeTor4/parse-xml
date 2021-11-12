@@ -14,10 +14,15 @@ public class Icms10 {
 	private String aliqICMSST;
 	private String vICMSST;
 	
+	private String reg = "icms10";
+	
 	public Icms10() {
 		
 	}
 
+    public Icms10(String reg) {
+		this.reg = reg;
+	}
 	public Icms10(CstIcms cst, String modBC, String vBC, String aliqImp, String vICMS, String modBCST, String aliqMVAST,
 			String aliqRedBCST, String vBCST, String aliqICMSST, String vICMSST) {
 		super();
@@ -120,6 +125,10 @@ public class Icms10 {
 
 	public void setvICMSST(String vICMSST) {
 		this.vICMSST = vICMSST;
+	}
+
+	public String getReg() {
+		return reg;
 	}
 	
 	

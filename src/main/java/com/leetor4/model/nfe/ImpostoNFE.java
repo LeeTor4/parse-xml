@@ -5,8 +5,7 @@ public class ImpostoNFE {
 	private Icms   icms   = new Icms();
 	private Pis    pis    = new Pis();
 	private Cofins cofins = new Cofins();
-	
-	
+
 	
 	public Icms getIcms() {
 		return icms;
@@ -26,7 +25,5 @@ public class ImpostoNFE {
 	public void setCofins(Cofins cofins) {
 		this.cofins = cofins;
 	}
-	
-	
 	
 }

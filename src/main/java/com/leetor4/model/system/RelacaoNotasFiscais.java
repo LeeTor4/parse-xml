@@ -3,6 +3,7 @@ package com.leetor4.model.system;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -17,12 +18,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.leetor4.handler.ParseNFE;
 import com.leetor4.model.nfe.NotaFiscal;
 import com.leetor4.model.nfe.Produtos;
+import com.leetor4.util.UtilsEConverters;
 
 public class RelacaoNotasFiscais {
     
 	private ParseNFE parse = new ParseNFE();
 	
-	public Map<Integer, Object[]>  relacaoNotasFiscais(File diretorio) throws IOException, JAXBException {
+	public Map<Integer, Object[]>  relacaoNotasFiscais(File diretorio, String operacao) throws IOException, JAXBException {
 		int id=0;
 		int indice = 1;
 
@@ -31,7 +33,7 @@ public class RelacaoNotasFiscais {
 	    Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
 	    data.put(indice, 
 	    new Object[]
-	    {"ID","CHAVE","UF","COD_NF","NAT_OPERAÇÃO","MODELO_DOC","SERIE","NUM_DOC",
+	    {"ID","OPERACAO","CHAVE","UF","COD_NF","NAT_OPERAÇÃO","MODELO_DOC","SERIE","NUM_DOC","DT_EMISSAO",
 	    "CNPJ_EMIT","NOME_EMIT", "CNPJ_DEST","NOME_DEST","IE_DEST",
 	    "NUM_ITEM","COD_ITEM","DESCRIÇAO","NCM","CFOP","ORIG","CST_ICMS","MOD_BC","VL_BC","ALIQ_ICMS","VL_ICMS","MOD_BC_ST","CST_PIS","CST_COFINS","UND_COMERCIAL","QTD_COMERCIAL","VL_UND_COMERCIAL","VL_PRODUTO",
 	    "COD_EAN_TRIB","UND_TRIB","QTD_TRIB","VL_UNID_TRIB","IND_TOT","NUM_LOTE","QTDE_LOTE","FAB_LOTE","VAL_LOTE",
@@ -39,7 +41,6 @@ public class RelacaoNotasFiscais {
 	    "VL_IPI","VL_IPI_DEVOL","VL_PIS","VL_COFINS","VL_OUTROS","VL_NF"});		
 		ParseNFE parse = new ParseNFE();
 		for(NotaFiscal n : parse.validaTipoDeParseNFE(diretorio)){
-			//System.out.println(n.getIdent().getChaveeletronica());
 			for(Produtos p: n.getProds()){
 				id++;
 				indice++;
@@ -101,15 +102,19 @@ public class RelacaoNotasFiscais {
 //				        n.getTotal().getIcmsTot().getVlNF()
 //				        
 //				      );
+				
+				
+				
 				data.put(indice, 
 						  
-		        new Object[]{id, n.getIdent().getChaveeletronica(),
+		        new Object[]{id, operacao,n.getIdent().getChaveeletronica(),
 		        		 n.getIdent().getCodigoUF(),
 		        		 n.getIdent().getCodigoNF(),
 		        		 n.getIdent().getNaturezaOperacao(),
 		        		 n.getIdent().getModeloDoc(),
 		        		 n.getIdent().getSerie(),
 		        		 n.getIdent().getNumDoc() ,
+		        		 UtilsEConverters.getStringParaData(n.getIdent().getDataEmissao()),
 		        		 n.getEmitente().getCnpj(),
 		        		 n.getEmitente().getNome(),
 		        		 n.getDestinatario().getCnpj(),
@@ -123,8 +128,8 @@ public class RelacaoNotasFiscais {
 		        		 p.getOrig(),
 		        		 p.getCst(),
 		        		 p.getModBc(),
-		        		 (p.getVlBc()==null?"":p.getVlBc().replace(".",",")),
-		        		 (p.getAliqIcms()==null?"":p.getAliqIcms().replace(".",",")),
+		        		 (p.getVlBc()==null?"0,00":p.getVlBc().replace(".",",")),
+		        		 (p.getAliqIcms()==null?"0,00":p.getAliqIcms().replace(".",",")),
 		        		 (p.getVlIcms()==null?"":p.getVlIcms().replace(".",",")),
 		        		 p.getModBcST(),
 		        		 p.getCstPis() ,
@@ -144,7 +149,7 @@ public class RelacaoNotasFiscais {
 		        		 p.getRastro().getDtVal(),
 		        		 n.getTotal().getIcmsTot().getVlBc().replace(".",","),
  				         n.getTotal().getIcmsTot().getVlIcms().replace(".",","),
- 				         n.getTotal().getIcmsTot().getVlIcmsDeson().replace(".",","),
+ 				         (n.getTotal().getIcmsTot().getVlIcmsDeson()==null?"":n.getTotal().getIcmsTot().getVlIcmsDeson().replace(".",",")),
  				         (n.getTotal().getIcmsTot().getVlFCP() == null ?"": n.getTotal().getIcmsTot().getVlFCP().replace(".",",")),
  				         n.getTotal().getIcmsTot().getVlBCST().replace(".",","),
  				         n.getTotal().getIcmsTot().getVlST().replace(".",","), 
@@ -196,6 +201,10 @@ public class RelacaoNotasFiscais {
 	            else if (obj instanceof Integer) 
 	            {
 	                cell.setCellValue((Integer) obj);
+	            }
+	            else if (obj instanceof LocalDate) 
+	            {
+	                cell.setCellValue((LocalDate) obj);
 	            }
 	        }
 	    }

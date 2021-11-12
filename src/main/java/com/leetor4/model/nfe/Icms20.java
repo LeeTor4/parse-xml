@@ -10,6 +10,8 @@ public class Icms20 {
 	private String aliqICMS;
 	private String vICMS;
 	
+	private String reg = "icms20";
+	
 	public Icms20() {
 		
 	}
@@ -46,6 +48,38 @@ public class Icms20 {
 
 	public String getvICMS() {
 		return vICMS;
+	}
+
+	public String getReg() {
+		return reg;
+	}
+
+	public void setCst(CstIcms cst) {
+		this.cst = cst;
+	}
+
+	public void setModBC(String modBC) {
+		this.modBC = modBC;
+	}
+
+	public void setAliqRedBC(String aliqRedBC) {
+		this.aliqRedBC = aliqRedBC;
+	}
+
+	public void setvBC(String vBC) {
+		this.vBC = vBC;
+	}
+
+	public void setAliqICMS(String aliqICMS) {
+		this.aliqICMS = aliqICMS;
+	}
+
+	public void setvICMS(String vICMS) {
+		this.vICMS = vICMS;
+	}
+
+	public void setReg(String reg) {
+		this.reg = reg;
 	}
 	
 	

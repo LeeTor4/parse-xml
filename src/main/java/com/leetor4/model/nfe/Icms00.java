@@ -7,11 +7,16 @@ public class Icms00 {
 	private String vBC;
 	private String aliqImp;
 	private String vICMS;
+	private String reg = "icms00";
 	
 	public Icms00() {
 		
 	}
 
+	public Icms00(String reg ) {
+		this.reg = reg;
+	}
+	
 	public Icms00(CstIcms cst, String modBC, String vBC, String aliqImp, String vICMS) {
 		super();
 		this.cst = cst;
@@ -59,6 +64,10 @@ public class Icms00 {
 
 	public void setvICMS(String vICMS) {
 		this.vICMS = vICMS;
+	}
+
+	public String getReg() {
+		return reg;
 	}
 
     

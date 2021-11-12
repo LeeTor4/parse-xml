@@ -6,9 +6,15 @@ public class Icms60 {
 	private String vBCSTRet;
 	private String vICMSSTRet;
 	
+	private String reg = "icms60";
+	
 	public Icms60() {
 		
 	}
+	public Icms60(String reg) {
+		this.reg = reg;
+	}
+	
 	public Icms60(CstIcms cst, String vBCSTRet, String vICMSSTRet) {
 		super();
 		this.cst = cst;
@@ -33,6 +39,9 @@ public class Icms60 {
 	}
 	public void setvICMSSTRet(String vICMSSTRet) {
 		this.vICMSSTRet = vICMSSTRet;
+	}
+	public String getReg() {
+		return reg;
 	}
 	
 	

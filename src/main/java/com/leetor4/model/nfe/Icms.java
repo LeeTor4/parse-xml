@@ -24,12 +24,22 @@ public class Icms {
 	private IcmsCSOSN500 icmsCSOSN500 = new IcmsCSOSN500();
 	private IcmsCSOSN900 icmsCSOSN900 = new IcmsCSOSN900();
 	
-
+    private String cstA;
+    private String cstB;
+    private String CSOSN;
+    
 	public Icms() {
 
 	}
 
+    
+	public Icms(String cstA, String cstB) {
+		super();
+		this.cstA = cstA;
+		this.cstB = cstB;
+	}
 
+	
 	public Enum<GrupoIcms> getGrupoIcms() {
 		return grupoIcms;
 	}
@@ -182,5 +192,21 @@ public class Icms {
 		this.icmsCSOSN900 = icmsCSOSN900;
 	}
 
+
+	public String getCstA() {
+		return cstA;
+	}
+
+
+	public String getCstB() {
+		return cstB;
+	}
+
+
+	public String getCSOSN() {
+		return CSOSN;
+	}
+
+	
 	
 }

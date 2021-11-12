@@ -25,23 +25,25 @@ public class JAXBMain {
 		
 		File diretorio  = new File("D:\\XML");
 		Path dirDest    = Paths.get("D:\\xml-servidor");
-		String dest     = "D:\\Relacao_Saidas.xlsx";
+		String dest     = "D:\\Matriz_Saidas_2013_12.xlsx";
 		
 		ParseNFE parse = new ParseNFE();
 		
 		
 		XSSFWorkbook workbook = new XSSFWorkbook();
-		XSSFSheet sheet = workbook.createSheet("Notas Proprias");
+		XSSFSheet sheet = workbook.createSheet("Notas Saidas");
         RelacaoNotasFiscais relacao = new RelacaoNotasFiscais();
         //relacao.relacaoNotasFiscais(diretorio);
-        relacao.exporaNotasFiscais(relacao.relacaoNotasFiscais(diretorio), workbook, sheet, dest);
+        String operacao = "S";
+        relacao.exporaNotasFiscais(relacao.relacaoNotasFiscais(diretorio,operacao), workbook, sheet, dest);
         
         String cnpj = "";
-        String codItem = "38462";
+        String codItem = "103420";
         String orig = "";
         String cst  = "";
         String numDoc = "";
-        //relacao.getParse().filtrarNotasFiscais(diretorio, dirDest,cnpj,codItem,orig,cst,numDoc);
+        String cfop = "";
+        //relacao.getParse().filtrarNotasFiscais(diretorio, dirDest,cnpj,codItem,cfop,orig,cst,numDoc);
         
      
 	}

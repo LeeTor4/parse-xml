@@ -15,6 +15,7 @@ public class Produtos {
 	 private String vlBc;
 	 private String aliqIcms;
 	 private String vlIcms;
+	 private String motDeso;
 	 private String modBcST;
 	 private String vlBcST;
 	 private String vlBcSTRet;
@@ -32,6 +33,7 @@ public class Produtos {
 	 private String qtdTrib;
 	 private String vlUnTrib;
 	 private String indTot;
+	 
 	 
 	 private Rastreamento rastro = new Rastreamento();
 	
@@ -296,8 +298,12 @@ public class Produtos {
 		this.vlIcmsSTRet = vlIcmsSTRet;
 	}
 
-    
- 
-    
+	public String getMotDeso() {
+		return motDeso;
+	}
+
+	public void setMotDeso(String motDeso) {
+		this.motDeso = motDeso;
+	}
 	
 }

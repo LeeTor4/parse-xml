@@ -15,9 +15,15 @@ public class Icms90 {
 	private String vBCST;
 	private String aliqICMSST;
 	private String vICMSST;
+	
+	private String reg = "icms90";
 
 	public Icms90() {
 		
+	}
+
+    public Icms90(String reg) {
+		this.reg = reg;
 	}
 
 	public CstIcms getCst() {
@@ -114,6 +120,10 @@ public class Icms90 {
 
 	public void setvICMSST(String vICMSST) {
 		this.vICMSST = vICMSST;
+	}
+
+	public String getReg() {
+		return reg;
 	}
 
 	

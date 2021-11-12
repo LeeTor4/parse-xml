@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,14 @@ import com.leetor4.model.nfe.ContribuicaoPis;
 import com.leetor4.model.nfe.Destinatario;
 import com.leetor4.model.nfe.Emitente;
 import com.leetor4.model.nfe.Icms;
+import com.leetor4.model.nfe.Icms00;
+import com.leetor4.model.nfe.Icms10;
+import com.leetor4.model.nfe.Icms20;
+import com.leetor4.model.nfe.Icms40_41_50;
+import com.leetor4.model.nfe.Icms60;
+import com.leetor4.model.nfe.Icms90;
+import com.leetor4.model.nfe.IcmsCSOSN101;
+import com.leetor4.model.nfe.IcmsCSOSN102_103_300_400;
 import com.leetor4.model.nfe.Identificacao;
 import com.leetor4.model.nfe.ImpostoICMS;
 import com.leetor4.model.nfe.ImpostoNFE;
@@ -36,6 +45,7 @@ import com.leetor4.portalfiscal.inf.br.nfe.TNFe.InfNFe.Det.Imposto.ICMS;
 import com.leetor4.portalfiscal.inf.br.nfe.TNFe.InfNFe.Det.Imposto.PIS;
 import com.leetor4.portalfiscal.inf.br.nfe.TNFe.InfNFe.Det.Prod.Rastro;
 import com.leetor4.portalfiscal.inf.br.nfe.TNfeProc;
+import com.leetor4.util.UtilsEConverters;
 
 public class ParseNFE {
 
@@ -60,7 +70,7 @@ public class ParseNFE {
 				} else if (line.contains("<NFe")) {
 					parseNFeV4_00(notas, arquivo, leituraXML);
 				} else {
-					System.out.println(line);
+					System.out.println("Não Importada");
 				}
 
 			}
@@ -81,7 +91,7 @@ public class ParseNFE {
 		NotaFiscal nf = new NotaFiscal();
 		Identificacao ident = new Identificacao();
 		if (nfe.getNFe().getInfNFe() != null) {
-			ident.setChaveeletronica(nfe.getNFe().getInfNFe().getId().substring(3));
+			
 			ident.setChaveeletronica(nfe.getNFe().getInfNFe().getId().substring(3));
 			ident.setCodigoUF(nfe.getNFe().getInfNFe().getIde().getCUF());
 			ident.setCodigoNF(nfe.getNFe().getInfNFe().getIde().getCNF());
@@ -89,7 +99,14 @@ public class ParseNFE {
 			ident.setModeloDoc(nfe.getNFe().getInfNFe().getIde().getMod());
 			ident.setSerie(nfe.getNFe().getInfNFe().getIde().getSerie());
 			ident.setNumDoc(nfe.getNFe().getInfNFe().getIde().getNNF());
-			ident.setDataEmissao(nfe.getNFe().getInfNFe().getIde().getDhEmi());
+			
+			//Tag ajustada na classe TNFe , pois é da versão 2.00
+			if(nfe.getNFe().getInfNFe().getIde().getDhEmi() != null) {
+				ident.setDataEmissao(nfe.getNFe().getInfNFe().getIde().getDhEmi());
+			}else if(nfe.getNFe().getInfNFe().getIde().getDEmi() != null) {
+				ident.setDataEmissao(nfe.getNFe().getInfNFe().getIde().getDEmi());
+			}
+			//Ajustar Tag como acima
 			ident.setDataEntSai(nfe.getNFe().getInfNFe().getIde().getDhSaiEnt());
 			ident.setTipoNF(nfe.getNFe().getInfNFe().getIde().getTpNF());
 			ident.setIdDest(nfe.getNFe().getInfNFe().getIde().getIdDest());
@@ -101,7 +118,8 @@ public class ParseNFE {
 			ident.setFinalidadeEmissao(nfe.getNFe().getInfNFe().getIde().getFinNFe());
 			ident.setProcessoEmissao(nfe.getNFe().getInfNFe().getIde().getProcEmi());
 			ident.setVersaoProcesso(nfe.getNFe().getInfNFe().getIde().getVerProc());
-
+	
+			
 			Emitente emit = new Emitente();
 
 			emit.setCnpj(nfe.getNFe().getInfNFe().getEmit().getCNPJ());
@@ -137,7 +155,81 @@ public class ParseNFE {
 				prod.setVlUnTrib(det.getProd().getVUnTrib());
 				prod.setIndTot(det.getProd().getIndTot());
 
-				getImpostoIcms(det, prod, imp);
+				ICMS icms = det.getImposto().getIcms();
+				Field[] fieldsICMS = icms.getClass().getDeclaredFields();
+				for (Field field : fieldsICMS) {
+					Icms grp_icms = impICMS.impostoICMS(field.getName(), det, imp);
+
+					 if(field.getName() != null) {
+							
+						    Icms00       addICMS00 = addICMS00(field, grp_icms);
+							Icms10       addICMS10 = addICMS10(field, grp_icms);
+							Icms40_41_50 addICMS40 = addICMS40(field, grp_icms);
+							Icms60       addICMS60 = addICMS60(field, grp_icms);
+							Icms90       addICMS90 = addICMS90(field, grp_icms);
+							IcmsCSOSN102_103_300_400 addCSOSN102_103_300_40 = addCSOSN102_103_300_400(field, grp_icms);
+							IcmsCSOSN101  addCSOSN101  = addCSOSN101(field, grp_icms);
+							Icms20          addICMS20  = addICMS20(field, grp_icms);
+							if(addICMS00.getCst().getCstA() != null && addICMS00.getCst().getCstB() != null) {
+								prod.setOrig(addICMS00.getCst().getCstA());
+								prod.setCst(addICMS00.getCst().getCstB());
+								prod.setModBc(addICMS00.getModBC());
+								prod.setVlBc(addICMS00.getvBC());
+								prod.setAliqIcms(addICMS00.getAliqImp());
+								prod.setVlIcms(addICMS00.getvICMS());
+							}else if(addICMS10.getCst().getCstA() != null && addICMS10.getCst().getCstB() != null) {
+								prod.setOrig(addICMS10.getCst().getCstA());
+								prod.setCst(addICMS10.getCst().getCstB());
+								prod.setModBc(addICMS10.getModBC());
+								prod.setVlBc(addICMS10.getvBC());
+								prod.setAliqIcms(addICMS10.getAliqImp());
+								prod.setVlIcms(addICMS10.getvICMS());
+							}else if(addICMS20.getCst().getCstA() != null && addICMS20.getCst().getCstB() != null) {
+								prod.setOrig(addICMS20.getCst().getCstA());
+								prod.setCst(addICMS20.getCst().getCstB());
+								prod.setModBc(addICMS20.getModBC());
+							
+								
+							}else if(addICMS90.getCst().getCstA() != null && addICMS90.getCst().getCstB() != null) {
+								prod.setOrig(addICMS90.getCst().getCstA());
+								prod.setCst(addICMS90.getCst().getCstB());
+								prod.setModBc(addICMS90.getModBC());
+								prod.setVlBc(addICMS90.getvBC());
+								prod.setAliqIcms(addICMS90.getAliqICMS());
+								prod.setVlIcms(addICMS90.getvICMS());
+							}else if(addCSOSN101.getCst().getCstA() != null && 
+									addCSOSN101.getCst().getCSOSN() != null) {
+								prod.setOrig(addCSOSN101.getCst().getCstA());
+								prod.setCst( addCSOSN101.getCst().getCSOSN());
+							}else if(addCSOSN102_103_300_40.getCst().getCstA() != null &&
+									addCSOSN102_103_300_40.getCst().getCSOSN() != null) {
+								prod.setOrig(addCSOSN102_103_300_40.getCst().getCstA());
+								prod.setCst( addCSOSN102_103_300_40.getCst().getCSOSN());
+							}
+							
+							
+							if( addICMS40.getCst().getCstA() != null && addICMS40.getCst().getCstB() != null) {
+								prod.setOrig( addICMS40.getCst().getCstA());
+								prod.setCst( addICMS40.getCst().getCstB());
+								prod.setVlIcms(addICMS40.getvICMS());
+								prod.setMotDeso(addICMS40.getMotDesICMS());							
+							}
+							
+							if( addICMS60.getCst().getCstA() != null && addICMS60.getCst().getCstB() != null) {
+								prod.setOrig(addICMS60.getCst().getCstA());
+								prod.setCst( addICMS60.getCst().getCstB());
+								prod.setVlBcSTRet(addICMS60.getvBCSTRet());
+								prod.setVlIcmsSTRet(addICMS60.getvICMSSTRet());
+													
+							}
+
+							//System.out.println(field.getName() +"|" + addCSOSN102_103_300_40.getCst().getCSOSN());
+					 }
+				
+				}
+				   
+				
+				
 				
 				PIS pis = det.getImposto().getPis();
 				Field[] fieldsPIS = pis.getClass().getDeclaredFields();
@@ -227,6 +319,9 @@ public class ParseNFE {
 			ident.setProcessoEmissao(nfe.getInfNFe().getIde().getProcEmi());
 			ident.setVersaoProcesso(nfe.getInfNFe().getIde().getVerProc());
 
+			
+			
+			
 			Emitente emit = new Emitente();
 
 			emit.setCnpj(nfe.getInfNFe().getEmit().getCNPJ());
@@ -261,7 +356,83 @@ public class ParseNFE {
 				prod.setVlUnTrib(det.getProd().getVUnTrib());
 				prod.setIndTot(det.getProd().getIndTot());
 
-				getImpostoIcms(det, prod, imp);
+			
+				ICMS icms = det.getImposto().getIcms();
+				Field[] fieldsICMS = icms.getClass().getDeclaredFields();
+				for (Field field : fieldsICMS) {
+					Icms grp_icms = impICMS.impostoICMS(field.getName(), det, imp);
+
+					
+                     if(field.getName() != null) {
+						
+                    	    Icms00       addICMS00 = addICMS00(field, grp_icms);
+							Icms10       addICMS10 = addICMS10(field, grp_icms);
+							Icms40_41_50 addICMS40 = addICMS40(field, grp_icms);
+							Icms60       addICMS60 = addICMS60(field, grp_icms);
+							Icms90       addICMS90 = addICMS90(field, grp_icms);
+							IcmsCSOSN102_103_300_400 addCSOSN102_103_300_40 = addCSOSN102_103_300_400(field, grp_icms);
+							IcmsCSOSN101  addCSOSN101  = addCSOSN101(field, grp_icms);
+							Icms20          addICMS20  = addICMS20(field, grp_icms);
+							
+							if(addICMS00.getCst().getCstA() != null && addICMS00.getCst().getCstB() != null) {
+								prod.setOrig(addICMS00.getCst().getCstA());
+								prod.setCst(addICMS00.getCst().getCstB());
+								prod.setModBc(addICMS00.getModBC());
+								prod.setVlBc(addICMS00.getvBC());
+								prod.setAliqIcms(addICMS00.getAliqImp());
+								prod.setVlIcms(addICMS00.getvICMS());
+							}else if(addICMS10.getCst().getCstA() != null && addICMS10.getCst().getCstB() != null) {
+								prod.setOrig(addICMS10.getCst().getCstA());
+								prod.setCst(addICMS10.getCst().getCstB());
+								prod.setModBc(addICMS10.getModBC());
+								prod.setVlBc(addICMS10.getvBC());
+								prod.setAliqIcms(addICMS10.getAliqImp());
+								prod.setVlIcms(addICMS10.getvICMS());
+							}else if(addICMS20.getCst().getCstA() != null && addICMS20.getCst().getCstB() != null) {
+								prod.setOrig(addICMS20.getCst().getCstA());
+								prod.setCst(addICMS20.getCst().getCstB());
+								prod.setModBc(addICMS20.getModBC());
+							
+								
+							}else if(addICMS90.getCst().getCstA() != null && addICMS90.getCst().getCstB() != null) {
+								prod.setOrig(addICMS90.getCst().getCstA());
+								prod.setCst(addICMS90.getCst().getCstB());
+								prod.setModBc(addICMS90.getModBC());
+								prod.setVlBc(addICMS90.getvBC());
+								prod.setAliqIcms(addICMS90.getAliqICMS());
+								prod.setVlIcms(addICMS90.getvICMS());
+							}else if(addCSOSN101.getCst().getCstA() != null && 
+									addCSOSN101.getCst().getCSOSN() != null) {
+								prod.setOrig(addCSOSN101.getCst().getCstA());
+								prod.setCst( addCSOSN101.getCst().getCSOSN());
+							}else if(addCSOSN102_103_300_40.getCst().getCstA() != null &&
+									addCSOSN102_103_300_40.getCst().getCSOSN() != null) {
+								prod.setOrig(addCSOSN102_103_300_40.getCst().getCstA());
+								prod.setCst( addCSOSN102_103_300_40.getCst().getCSOSN());
+							}
+						
+							if( addICMS40.getCst().getCstA() != null && addICMS40.getCst().getCstB() != null) {
+								prod.setOrig( addICMS40.getCst().getCstA());
+								prod.setCst( addICMS40.getCst().getCstB());
+								prod.setVlIcms(addICMS40.getvICMS());
+								prod.setMotDeso(addICMS40.getMotDesICMS());							
+							}
+							
+							if( addICMS60.getCst().getCstA() != null && addICMS60.getCst().getCstB() != null) {
+								prod.setOrig(addICMS60.getCst().getCstA());
+								prod.setCst( addICMS60.getCst().getCstB());
+								prod.setVlBcSTRet(addICMS60.getvBCSTRet());
+								prod.setVlIcmsSTRet(addICMS60.getvICMSSTRet());
+													
+							}
+					
+							//System.out.println(field.getName() +"|" + addCSOSN102_103_300_40.getCst().getCSOSN());
+					 }
+					
+				}
+				
+				
+				
 				
 				PIS pis = det.getImposto().getPis();
 				Field[] fieldsPIS = pis.getClass().getDeclaredFields();
@@ -323,7 +494,7 @@ public class ParseNFE {
 		}
 	}
 
-	public List<NotaFiscal> filtrarNotasFiscais(File diretorio, Path destino, String cnpj, String codItem, String orig,
+	public List<NotaFiscal> filtrarNotasFiscais(File diretorio, Path destino, String cnpj, String codItem,String cfop ,String orig,
 			String cst, String numDoc) throws IOException, JAXBException {
 		List<NotaFiscal> notas = new ArrayList<NotaFiscal>();
 		File[] arquivos = diretorio.listFiles();
@@ -338,8 +509,11 @@ public class ParseNFE {
 						|| line.contains("<cProd>".concat(codItem).concat("</cProd>"))
 						|| line.contains("<orig>".concat(orig).concat("</orig>"))
 						|| line.contains("<CST>".concat(cst).concat("</CST>"))
-						|| line.contains("<nNF>".concat(numDoc).concat("</nNF>"))) {
+						|| line.contains("<nNF>".concat(numDoc).concat("</nNF>"))
+						|| line.contains("<CFOP>".concat(cfop).concat("</CFOP>"))) {
 
+					
+			
 					Path pOrig = Paths.get(xmlFile.getPath());
 					Path pDest = Paths.get(destino.toString().concat("\\").concat(xmlFile.getName()));
 
@@ -354,101 +528,289 @@ public class ParseNFE {
 
 		return notas;
 	}
+	
 
-	private void getImpostoIcms(Det det, Produtos prod, ImpostoNFE imp) {
-		ICMS icms = det.getImposto().getIcms();
-		Field[] fieldsICMS = icms.getClass().getDeclaredFields();
-		for (Field field : fieldsICMS) {
-
-			Icms grp_icms = impICMS.impostoICMS(field.getName(), det, imp);
-
-//			addICMS00(prod, grp_icms);
-			addICMS60(prod, grp_icms);
-//			addICMS90(prod, grp_icms);
+	private Icms00 addICMS00(Field field,Icms grp_icms) {
+		
+		Icms00 icms00 = new Icms00();
+		if(field.getName().equals( grp_icms.getIcms00().getReg())) {
+		    
+			if(!grp_icms.getIcms00().getCst().getCstA().isBlank()) {
+				icms00.getCst().setCstA(grp_icms.getIcms00().getCst().getCstA());
+			}
+			if(!grp_icms.getIcms00().getCst().getCstB().isBlank()) {
+				icms00.getCst().setCstB(grp_icms.getIcms00().getCst().getCstB());
+			}
+			if(!grp_icms.getIcms00().getModBC().isBlank()) {
+				icms00.setModBC(grp_icms.getIcms00().getModBC());;
+			}		
+			if(!grp_icms.getIcms00().getvBC().isBlank()) {
+				icms00.setvBC(grp_icms.getIcms00().getvBC());
+			}
+			if(!grp_icms.getIcms00().getAliqImp().isBlank()) {
+				icms00.setAliqImp(grp_icms.getIcms00().getAliqImp());
+			}
+			if(!grp_icms.getIcms00().getvICMS().isBlank()) {
+				icms00.setvICMS(grp_icms.getIcms00().getvICMS());
+			}
 			
-			prod.getImps().setIcms(grp_icms);
 		}
-	}
-
-	private void addICMS00(Produtos prod, Icms grp_icms) {
-		if(grp_icms.getIcms00().getCst().getCstA() != null) {				
-			prod.setOrig(grp_icms.getIcms00().getCst().getCstA());
-		}
-		if(grp_icms.getIcms00().getCst().getCstB() != null) {				
-			prod.setCst(grp_icms.getIcms00().getCst().getCstB());
-		}
-		if(grp_icms.getIcms00().getModBC() != null) {	
-			prod.setModBc(grp_icms.getIcms00().getModBC());
-		}
-		if(grp_icms.getIcms00().getvBC() != null) {	
-			prod.setVlBc(grp_icms.getIcms00().getvBC());
-		}
-		if(grp_icms.getIcms00().getAliqImp() != null) {	
-			prod.setAliqIcms(grp_icms.getIcms00().getAliqImp());
-		}
-		if(grp_icms.getIcms00().getvICMS() != null) {	
-			prod.setVlIcms(grp_icms.getIcms00().getvICMS());
-		}
+       
+		return icms00;
 	}
 	
-	private void addICMS60(Produtos prod, Icms grp_icms) {
-		if(grp_icms.getIcms60().getCst().getCstA() != null) {				
-			prod.setOrig(grp_icms.getIcms60().getCst().getCstA());
+	private Icms10 addICMS10(Field field,Icms grp_icms) {
+		Icms10 icms10 = new Icms10();
+		if (field.getName().equals(grp_icms.getIcms10().getReg())) {
 			
-		}
-		if(grp_icms.getIcms60().getCst().getCstB() != null) {				
-			prod.setCst(grp_icms.getIcms60().getCst().getCstB());
+			if (!grp_icms.getIcms10().getCst().getCstA().isBlank()) {
+				icms10.getCst().setCstA(grp_icms.getIcms10().getCst().getCstA());			
+			}
 			
-		}
-		if(grp_icms.getIcms60().getvBCSTRet() != null) {				
-			prod.setVlBcSTRet(grp_icms.getIcms60().getvBCSTRet());
+			if (!grp_icms.getIcms10().getCst().getCstB().isBlank()) {
+				icms10.getCst().setCstB(grp_icms.getIcms10().getCst().getCstB());
+			}
 			
+			if (!grp_icms.getIcms10().getModBC().isBlank()) {
+				icms10.setModBC(grp_icms.getIcms10().getModBC());
+			}
 			
-		}
-		if(grp_icms.getIcms60().getvICMSSTRet() != null) {				
-			prod.setVlIcmsSTRet(grp_icms.getIcms60().getvICMSSTRet());
+			if (!grp_icms.getIcms10().getvBC().isBlank()) {
+				icms10.setvBC(grp_icms.getIcms10().getvBC());
+			}
+			
+			if (!grp_icms.getIcms10().getAliqImp().isBlank()) {
+				icms10.setAliqImp(grp_icms.getIcms10().getAliqImp());
+			}
+			
+			if (!grp_icms.getIcms10().getvICMS().isBlank()) {
+				icms10.setvICMS(grp_icms.getIcms10().getvICMS());
+			}
+			
+			if (grp_icms.getIcms10().getModBCST() == null) {
+				icms10.setModBCST(grp_icms.getIcms10().getModBCST());
+			}
+            if (grp_icms.getIcms10().getvBCST() == null) {
+            	icms10.setvBCST(grp_icms.getIcms10().getvBCST());
+			}
+            if (grp_icms.getIcms10().getAliqICMSST() == null) {
+            	icms10.setAliqICMSST(grp_icms.getIcms10().getAliqICMSST());
+            }
+			if (grp_icms.getIcms10().getvICMSST() == null) {
+				icms10.setvICMSST(grp_icms.getIcms10().getvICMSST());
+			}
 		}
 		
+		return icms10;
 	}
 	
-	private void addICMS90(Produtos prod, Icms grp_icms) {
+	private Icms20 addICMS20(Field field,Icms grp_icms) {
+		Icms20 icms20 = new Icms20();
 		
-		if(grp_icms.getIcms90().getCst().getCstA() != null) {				
-			prod.setOrig(grp_icms.getIcms90().getCst().getCstA());
-		}
-		if(grp_icms.getIcms90().getCst().getCstB() != null) {				
-			prod.setCst(grp_icms.getIcms90().getCst().getCstB());
-		}
-		if(grp_icms.getIcms90().getModBC() != null) {	
-			prod.setModBc(grp_icms.getIcms90().getModBC());
-		}
-		if(grp_icms.getIcms90().getvBC() != null) {	
-			prod.setVlBc(grp_icms.getIcms90().getvBC());
+		if (field.getName().equals(grp_icms.getIcms20().getReg())) {
+			if (!grp_icms.getIcms20().getCst().getCstA().isBlank()) {
+				icms20.getCst().setCstA(grp_icms.getIcms20().getCst().getCstA());
+			}
+			
+			if (!grp_icms.getIcms20().getCst().getCstB().isBlank()) {
+				icms20.getCst().setCstB(grp_icms.getIcms20().getCst().getCstB());
+				
+			}
+			//Verificar outros e deixar igual
+			if(grp_icms.getIcms20().getModBC() != null) {
+				if(!grp_icms.getIcms20().getModBC().isBlank()) {
+					icms20.setModBC(grp_icms.getIcms20().getModBC());
+			
+				}
+			}
+				
+			
+			if(grp_icms.getIcms20().getAliqRedBC() == null) {
+				icms20.setAliqRedBC(grp_icms.getIcms20().getAliqRedBC());
+			}
+			
+			if(grp_icms.getIcms20().getvBC() == null) {
+				icms20.setvBC(grp_icms.getIcms20().getvBC());
+			}
+			
+			if(grp_icms.getIcms20().getAliqICMS() == null) {
+				icms20.setAliqICMS(grp_icms.getIcms20().getAliqICMS());
+			}
+			
+			if(grp_icms.getIcms20().getvICMS() == null) {
+				icms20.setvICMS(grp_icms.getIcms20().getvICMS());
+			}
 		}
 		
-		if(grp_icms.getIcms90().getAliqICMS() != null) {	
-			prod.setAliqIcms(grp_icms.getIcms90().getAliqICMS());;
-		}
 		
-		if(grp_icms.getIcms90().getvICMS() != null) {	
-			prod.setVlIcms(grp_icms.getIcms90().getvICMS());
+		return icms20;
+	}
+	private Icms40_41_50 addICMS40(Field field,Icms grp_icms) {
+		Icms40_41_50 icms40_41_50 = new Icms40_41_50();
+		if (field.getName().equals(grp_icms.getIcms40_41_50().getReg())) {
+			
+			if (!grp_icms.getIcms40_41_50().getCst().getCstA().isBlank()) {
+				icms40_41_50.getCst().setCstA(grp_icms.getIcms40_41_50().getCst().getCstA());
+			}
+			
+			if (!grp_icms.getIcms40_41_50().getCst().getCstB().isBlank()) {
+				icms40_41_50.getCst().setCstB(grp_icms.getIcms40_41_50().getCst().getCstB());
+				
+			}
+			
+			if (grp_icms.getIcms40_41_50().getvICMS() == null) {
+				icms40_41_50.setvICMS(grp_icms.getIcms40_41_50().getvICMS());
+			}
+			
+            if (grp_icms.getIcms40_41_50().getMotDesICMS() == null) {
+            	icms40_41_50.setMotDesICMS(grp_icms.getIcms40_41_50().getMotDesICMS());		
+			}
 		}
+		return icms40_41_50;
+	}
+	private Icms60 addICMS60(Field field,Icms grp_icms) {
+		Icms60 icms60 = new Icms60();
+		if (field.getName().equals(grp_icms.getIcms60().getReg())) {
 
-		if(grp_icms.getIcms90().getModBCST() != null) {	
-			prod.setModBcST(grp_icms.getIcms90().getModBCST());
+			if (!grp_icms.getIcms60().getCst().getCstA().isBlank()) {
+				icms60.getCst().setCstA(grp_icms.getIcms60().getCst().getCstA());
+			}
+			if (!grp_icms.getIcms60().getCst().getCstB().isBlank()) {
+				icms60.getCst().setCstB(grp_icms.getIcms60().getCst().getCstB());
+			}
+
+			if (grp_icms.getIcms60().getvBCSTRet() == null) {
+                icms60.setvBCSTRet(grp_icms.getIcms60().getvBCSTRet());
+			}
+
+			if (grp_icms.getIcms60().getvICMSSTRet() == null) {
+				icms60.setvICMSSTRet(grp_icms.getIcms60().getvICMSSTRet());
+			}
+
 		}
-		if(grp_icms.getIcms90().getvBCST() != null) {	
-			prod.setVlBcST(grp_icms.getIcms90().getvBCST());
+        return icms60;
+	}
+	
+
+	private Icms90 addICMS90(Field field,Icms grp_icms) {
+		
+	    Icms90 icms90 = new Icms90();
+		if(field.getName().equals( grp_icms.getIcms90().getReg())) {
+			
+			if(!grp_icms.getIcms90().getCst().getCstA().isBlank()) {
+				icms90.getCst().setCstA(grp_icms.getIcms90().getCst().getCstA());
+			}
+			if(!grp_icms.getIcms90().getCst().getCstB().isBlank()) {
+				icms90.getCst().setCstB(grp_icms.getIcms90().getCst().getCstB());
+			}
+			if(grp_icms.getIcms90().getModBC() != null) {
+				if(!grp_icms.getIcms90().getModBC().isBlank()) {
+					icms90.setModBC(grp_icms.getIcms90().getModBC());
+				}
+			}
+			if(grp_icms.getIcms90().getvBC() != null) {	
+				if(!grp_icms.getIcms90().getvBC().isBlank()) {
+					icms90.setvBC(grp_icms.getIcms90().getvBC());
+				}
+			}
+			if(grp_icms.getIcms90().getAliqICMS() != null) {
+				if(!grp_icms.getIcms90().getAliqICMS().isBlank()) {
+					icms90.setAliqICMS(grp_icms.getIcms90().getAliqICMS());
+				}
+			}
+			if(grp_icms.getIcms90().getvICMS() != null) {	
+				if(!grp_icms.getIcms90().getvICMS().isBlank()) {
+					icms90.setvICMS(grp_icms.getIcms90().getvICMS());
+				}	
+			}
+				
+			
+			
+			if(grp_icms.getIcms90().getModBCST() == null) {
+				 icms90.setModBCST(grp_icms.getIcms90().getModBCST());
+			}
+			if(grp_icms.getIcms90().getvBCST() == null) {
+				icms90.setvBCST(grp_icms.getIcms90().getvBCST());
+			}
+			if(grp_icms.getIcms90().getAliqICMSST() == null) {
+				icms90.setAliqICMSST(grp_icms.getIcms90().getAliqICMSST());
+			}
+			if(grp_icms.getIcms90().getvICMSST() == null) {
+				icms90.setvICMSST(grp_icms.getIcms90().getvICMSST());
+			}
+			
+		}
+		return icms90;
+	}
+	
+	private IcmsCSOSN101 addCSOSN101(Field field,Icms grp_icms) {
+		IcmsCSOSN101 grupo = new IcmsCSOSN101();
+		
+		if(field.getName().equals( grp_icms.getIcmsCSOSN102_103_300_400().getReg1())) {
+			
+			if(!grp_icms.getIcmsCSOSN101().getCst().getCstA().isBlank()) {
+				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN101().getCst().getCstA());
+			}
+			
+			if(!grp_icms.getIcmsCSOSN101().getCst().getCSOSN().isBlank()) {
+				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN101().getCst().getCSOSN());
+				
+			}
 		}
 		
-		if(grp_icms.getIcms90().getAliqICMSST() != null) {	
-			prod.setAliqIcmsST(grp_icms.getIcms90().getAliqICMSST());
+		return grupo;
+	}
+	private IcmsCSOSN102_103_300_400 addCSOSN102_103_300_400(Field field,Icms grp_icms) {
+		IcmsCSOSN102_103_300_400 grupo = new  IcmsCSOSN102_103_300_400();
+		
+        if(field.getName().equals( grp_icms.getIcmsCSOSN102_103_300_400().getReg2())) {
+			
+			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA().isBlank()) {
+				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA());
+			}
+			
+			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN().isBlank()) {
+				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN());
+				
+			}
+		}
+        
+        if(field.getName().equals( grp_icms.getIcmsCSOSN102_103_300_400().getReg3())) {
+			
+			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA().isBlank()) {
+				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA());
+			}
+			
+			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN().isBlank()) {
+				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN());
+				
+			}
+		}
+        
+        if(field.getName().equals( grp_icms.getIcmsCSOSN102_103_300_400().getReg4())) {
+			
+			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA().isBlank()) {
+				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA());
+			}
+			
+			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN().isBlank()) {
+				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN());
+				
+			}
+		}
+        
+        if(field.getName().equals( grp_icms.getIcmsCSOSN102_103_300_400().getReg5())) {
+			
+			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA().isBlank()) {
+				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA());
+			}
+			
+			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN().isBlank()) {
+				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN());
+				
+			}
 		}
 		
-		if(grp_icms.getIcms90().getvICMSST() != null) {	
-			prod.setVlIcmsST(grp_icms.getIcms90().getvICMSST());
-		}
-		
-		
+		return grupo;
 	}
 }

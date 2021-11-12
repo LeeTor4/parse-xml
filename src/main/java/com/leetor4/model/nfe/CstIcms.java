@@ -10,10 +10,12 @@ public class CstIcms {
 	private String vlBc;
 	private String aliqIcms;
 	private String vlIcms;
+	private String motDeso;
 	
 	private String mBcST;
 	private String vlBcST;
 	private String aliqIcmsST;
+	private String aliqRedBCST;
 	private String vlIcmsST;
 	
 	private String vlBcSTRet;
@@ -113,6 +115,18 @@ public class CstIcms {
 	}
 	public void setvCredICMSSN(String vCredICMSSN) {
 		this.vCredICMSSN = vCredICMSSN;
+	}
+	public String getMotDeso() {
+		return motDeso;
+	}
+	public void setMotDeso(String motDeso) {
+		this.motDeso = motDeso;
+	}
+	public String getAliqRedBCST() {
+		return aliqRedBCST;
+	}
+	public void setAliqRedBCST(String aliqRedBCST) {
+		this.aliqRedBCST = aliqRedBCST;
 	}
 	
 	

@@ -30357,8 +30357,10 @@ public class TNFe {
             "mod",
             "serie",
             "nnf",
+            "dEmi",
             "dhEmi",
-            "dhSaiEnt",
+            "dSaiEnt",
+            "dhSaiEnt",           
             "tpNF",
             "idDest",
             "cMunFG",
@@ -30390,8 +30392,10 @@ public class TNFe {
             protected String serie;
             @XmlElement(name = "nNF", required = true)
             protected String nnf;
+            protected String dEmi;
             @XmlElement(required = true)
             protected String dhEmi;
+            protected String dSaiEnt;
             protected String dhSaiEnt;
             @XmlElement(required = true)
             protected String tpNF;
@@ -30567,6 +30571,16 @@ public class TNFe {
                 this.nnf = value;
             }
 
+            
+            public String getDEmi() {
+                return dEmi;
+            }
+            
+            public void setDEmi(String value) {
+                this.dEmi = value;
+            }
+            
+            
             /**
              * Obtém o valor da propriedade dhEmi.
              * 
