@@ -29,6 +29,7 @@ import com.leetor4.model.nfe.Icms10;
 import com.leetor4.model.nfe.Icms20;
 import com.leetor4.model.nfe.Icms40_41_50;
 import com.leetor4.model.nfe.Icms60;
+import com.leetor4.model.nfe.Icms70;
 import com.leetor4.model.nfe.Icms90;
 import com.leetor4.model.nfe.IcmsCSOSN101;
 import com.leetor4.model.nfe.IcmsCSOSN102_103_300_400;
@@ -166,6 +167,7 @@ public class ParseNFE {
 							Icms10       addICMS10 = addICMS10(field, grp_icms);
 							Icms40_41_50 addICMS40 = addICMS40(field, grp_icms);
 							Icms60       addICMS60 = addICMS60(field, grp_icms);
+							Icms70       addICMS70 = addICMS70(field, grp_icms);
 							Icms90       addICMS90 = addICMS90(field, grp_icms);
 							IcmsCSOSN102_103_300_400 addCSOSN102_103_300_40 = addCSOSN102_103_300_400(field, grp_icms);
 							IcmsCSOSN101  addCSOSN101  = addCSOSN101(field, grp_icms);
@@ -222,7 +224,23 @@ public class ParseNFE {
 								prod.setVlIcmsSTRet(addICMS60.getvICMSSTRet());
 													
 							}
-
+							if( addICMS70.getCst().getCstA() != null && addICMS70.getCst().getCstB() != null) {
+								prod.setOrig(addICMS70.getCst().getCstA());
+								prod.setCst( addICMS70.getCst().getCstB());
+								prod.setModBc(addICMS70.getModBC());
+								prod.setAliqRedBc(addICMS70.getAliqRedBC());	
+								prod.setVlBc(addICMS70.getvBC());
+								prod.setAliqIcms(addICMS70.getAliqICMS());
+								prod.setVlIcms(addICMS70.getvICMS());
+								prod.setModBcST(addICMS70.getModBCST());
+								prod.setAliqMVAST(addICMS70.getAliqMVAST());
+								prod.setAliqRedBCST(addICMS70.getAliqRedBCST());
+								prod.setVlBcST(addICMS70.getvBCST());								
+								prod.setAliqIcmsST(addICMS70.getAliqICMSST());
+								prod.setVlIcmsST(addICMS70.getvICMSST());
+								prod.setVlIcmsDeson(addICMS70.getvICMSDeson());
+								prod.setMotDesICMS(addICMS70.getMotDesICMS());
+							}
 							//System.out.println(field.getName() +"|" + addCSOSN102_103_300_40.getCst().getCSOSN());
 					 }
 				
@@ -369,6 +387,7 @@ public class ParseNFE {
 							Icms10       addICMS10 = addICMS10(field, grp_icms);
 							Icms40_41_50 addICMS40 = addICMS40(field, grp_icms);
 							Icms60       addICMS60 = addICMS60(field, grp_icms);
+							Icms70       addICMS70 = addICMS70(field, grp_icms);
 							Icms90       addICMS90 = addICMS90(field, grp_icms);
 							IcmsCSOSN102_103_300_400 addCSOSN102_103_300_40 = addCSOSN102_103_300_400(field, grp_icms);
 							IcmsCSOSN101  addCSOSN101  = addCSOSN101(field, grp_icms);
@@ -424,6 +443,24 @@ public class ParseNFE {
 								prod.setVlBcSTRet(addICMS60.getvBCSTRet());
 								prod.setVlIcmsSTRet(addICMS60.getvICMSSTRet());
 													
+							}
+							
+							if( addICMS70.getCst().getCstA() != null && addICMS70.getCst().getCstB() != null) {
+								prod.setOrig(addICMS70.getCst().getCstA());
+								prod.setCst( addICMS70.getCst().getCstB());
+								prod.setModBc(addICMS70.getModBC());
+								prod.setAliqRedBc(addICMS70.getAliqRedBC());	
+								prod.setVlBc(addICMS70.getvBC());
+								prod.setAliqIcms(addICMS70.getAliqICMS());
+								prod.setVlIcms(addICMS70.getvICMS());
+								prod.setModBcST(addICMS70.getModBCST());
+								prod.setAliqMVAST(addICMS70.getAliqMVAST());
+								prod.setAliqRedBCST(addICMS70.getAliqRedBCST());
+								prod.setVlBcST(addICMS70.getvBCST());								
+								prod.setAliqIcmsST(addICMS70.getAliqICMSST());
+								prod.setVlIcmsST(addICMS70.getvICMSST());
+								prod.setVlIcmsDeson(addICMS70.getvICMSDeson());
+								prod.setMotDesICMS(addICMS70.getMotDesICMS());
 							}
 					
 							//System.out.println(field.getName() +"|" + addCSOSN102_103_300_40.getCst().getCSOSN());
@@ -691,6 +728,95 @@ public class ParseNFE {
         return icms60;
 	}
 	
+	private Icms70 addICMS70(Field field,Icms grp_icms) {
+		Icms70 icms70 = new Icms70();
+		
+		if(field.getName().equals( grp_icms.getIcms70().getReg())) {
+			
+			if(!grp_icms.getIcms70().getCst().getCstA().isBlank()) {
+				icms70.getCst().setCstA(grp_icms.getIcms70().getCst().getCstA());
+			}
+			if(!grp_icms.getIcms70().getCst().getCstB().isBlank()) {
+				icms70.getCst().setCstB(grp_icms.getIcms70().getCst().getCstB());
+			}
+			
+			if(grp_icms.getIcms70().getModBC() != null) {
+				if(!grp_icms.getIcms70().getModBC().isBlank()) {
+					icms70.setModBC(grp_icms.getIcms70().getModBC());				
+				}
+			}
+			
+            if(grp_icms.getIcms70().getAliqRedBC() != null) {
+            	if(!grp_icms.getIcms70().getAliqRedBC().isBlank()) {
+            		icms70.setAliqRedBC(grp_icms.getIcms70().getAliqRedBC());            	
+            	}
+			}
+            
+            if(grp_icms.getIcms70().getvBC() != null) {
+            	 if(!grp_icms.getIcms70().getvBC().isBlank()) {
+            		 icms70.setvBC(grp_icms.getIcms70().getvBC());
+            	 }
+			}
+            
+            if(grp_icms.getIcms70().getAliqICMS() != null) {
+            	 if(!grp_icms.getIcms70().getAliqICMS().isBlank()) {
+            		 icms70.setAliqICMS(grp_icms.getIcms70().getAliqICMS());
+            	 }
+			}
+            
+            if(grp_icms.getIcms70().getvICMS() != null) {
+            	 if(!grp_icms.getIcms70().getvICMS().isBlank()) {
+            		 icms70.setvICMS(grp_icms.getIcms70().getvICMS());
+            	 }
+			}
+            
+            if(grp_icms.getIcms70().getModBCST() != null) {
+            	 if(!grp_icms.getIcms70().getModBCST().isBlank()) {
+            		 icms70.setModBCST(grp_icms.getIcms70().getModBCST());
+            	 }
+			}
+            
+            if(grp_icms.getIcms70().getAliqMVAST() != null) {
+            	 if(!grp_icms.getIcms70().getAliqMVAST().isBlank()) {
+            		 icms70.setAliqMVAST(grp_icms.getIcms70().getAliqMVAST()); 
+            	 }
+			}
+            
+            if(grp_icms.getIcms70().getAliqRedBCST() != null) {
+            	 if(!grp_icms.getIcms70().getAliqRedBCST().isBlank()) {
+            		 icms70.setAliqRedBCST(grp_icms.getIcms70().getAliqRedBCST());
+            	 }
+			}
+            if(grp_icms.getIcms70().getvBCST() != null) {
+            	 if(!grp_icms.getIcms70().getvBCST().isBlank()) {
+            		 icms70.setvBCST(grp_icms.getIcms70().getvBCST());
+            	 }
+			}
+            if(grp_icms.getIcms70().getAliqICMSST() != null) {
+            	 if(!grp_icms.getIcms70().getAliqICMSST().isBlank()) {
+            		 icms70.setAliqICMSST(grp_icms.getIcms70().getAliqICMSST());
+            	 }
+			}
+            if(grp_icms.getIcms70().getvICMSST() != null) {
+            	 if(!grp_icms.getIcms70().getvICMSST().isBlank()) {
+            		 icms70.setvICMSST(grp_icms.getIcms70().getvICMSST());
+            	 }
+			}
+            if(grp_icms.getIcms70().getvICMSDeson() != null) {
+            	if(!grp_icms.getIcms70().getvICMSDeson().isBlank()) {
+            		icms70.setvICMSDeson(grp_icms.getIcms70().getvICMSDeson());;
+            	}
+			}
+            if(grp_icms.getIcms70().getMotDesICMS() != null) {
+            	if(!grp_icms.getIcms70().getMotDesICMS().isBlank()) {
+            		icms70.setMotDesICMS(grp_icms.getIcms70().getMotDesICMS());            	
+                }
+			}
+			
+		}
+		
+		return icms70;
+	}
 
 	private Icms90 addICMS90(Field field,Icms grp_icms) {
 		

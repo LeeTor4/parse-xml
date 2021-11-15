@@ -11,16 +11,22 @@ public class Produtos {
 	 private String cfop;
 	 private String orig;
 	 private String cst;
+	
 	 private String modBc;
+	 private String aliqRedBc;
 	 private String vlBc;
 	 private String aliqIcms;
 	 private String vlIcms;
 	 private String motDeso;
 	 private String modBcST;
+	 private String aliqMVAST;
+	 private String aliqRedBCST;
 	 private String vlBcST;
 	 private String vlBcSTRet;
 	 private String aliqIcmsST;
 	 private String vlIcmsST;
+	 private String vlIcmsDeson;
+	 private String motDesICMS;
 	 private String vlIcmsSTRet;
 	 private String cstPis;
 	 private String cstCofins;
@@ -305,5 +311,46 @@ public class Produtos {
 	public void setMotDeso(String motDeso) {
 		this.motDeso = motDeso;
 	}
+
+	public String getAliqRedBc() {
+		return aliqRedBc;
+	}
+
+	public void setAliqRedBc(String aliqRedBc) {
+		this.aliqRedBc = aliqRedBc;
+	}
+
+	public String getAliqMVAST() {
+		return aliqMVAST;
+	}
+
+	public void setAliqMVAST(String aliqMVAST) {
+		this.aliqMVAST = aliqMVAST;
+	}
+
+	public String getAliqRedBCST() {
+		return aliqRedBCST;
+	}
+
+	public void setAliqRedBCST(String aliqRedBCST) {
+		this.aliqRedBCST = aliqRedBCST;
+	}
+
+	public String getVlIcmsDeson() {
+		return vlIcmsDeson;
+	}
+
+	public void setVlIcmsDeson(String vlIcmsDeson) {
+		this.vlIcmsDeson = vlIcmsDeson;
+	}
+
+	public String getMotDesICMS() {
+		return motDesICMS;
+	}
+
+	public void setMotDesICMS(String motDesICMS) {
+		this.motDesICMS = motDesICMS;
+	}
+	
 	
 }

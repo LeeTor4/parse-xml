@@ -12,11 +12,16 @@ public class CstIcms {
 	private String vlIcms;
 	private String motDeso;
 	
+	
 	private String mBcST;
+	private String aliqRedBC;
+	private String aliqMVAST;
 	private String vlBcST;
 	private String aliqIcmsST;
 	private String aliqRedBCST;
 	private String vlIcmsST;
+	private String vICMSDeson;
+	private String motDesICMS;
 	
 	private String vlBcSTRet;
 	private String vlIcmsSTRet;
@@ -128,6 +133,31 @@ public class CstIcms {
 	public void setAliqRedBCST(String aliqRedBCST) {
 		this.aliqRedBCST = aliqRedBCST;
 	}
+	public String getAliqMVAST() {
+		return aliqMVAST;
+	}
+	public void setAliqMVAST(String aliqMVAST) {
+		this.aliqMVAST = aliqMVAST;
+	}
+	public String getvICMSDeson() {
+		return vICMSDeson;
+	}
+	public void setvICMSDeson(String vICMSDeson) {
+		this.vICMSDeson = vICMSDeson;
+	}
+	public String getMotDesICMS() {
+		return motDesICMS;
+	}
+	public void setMotDesICMS(String motDesICMS) {
+		this.motDesICMS = motDesICMS;
+	}
+	public String getAliqRedBC() {
+		return aliqRedBC;
+	}
+	public void setAliqRedBC(String aliqRedBC) {
+		this.aliqRedBC = aliqRedBC;
+	}
+	
 	
 	
 	

@@ -1,8 +1,11 @@
 package com.leetor4.util;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
+import java.util.Locale;
 
 public class UtilsEConverters {
 
@@ -26,5 +29,16 @@ public class UtilsEConverters {
 		LocalDate from = LocalDate.from(parse);
 		//System.out.println(from);
 		return from;
+	}
+	
+	public static String convertParaNumeroDecimalBrasil(String formato) {
+		String padrao = "###,###.##"; 
+        DecimalFormat df = new DecimalFormat(padrao);
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols(new Locale("pt","Brazil"));
+        dfs.setDecimalSeparator(',');
+        dfs.setGroupingSeparator('.');
+        df = new DecimalFormat(padrao,dfs);
+        
+        return df.format(formato);
 	}
 }

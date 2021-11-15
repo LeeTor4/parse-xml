@@ -266,6 +266,20 @@ public class ImpostoICMS {
 		Icms70 grupo70 = (Icms70) obj8;
 		CstIcms cstIcms = getCstIcms70(det);
 		Icms tipo = new Icms(cstIcms.getCstA(),cstIcms.getCstB());
+		grupo70.setCst(cstIcms);
+		grupo70.setModBC(cstIcms.getmBc());
+		grupo70.setAliqRedBC(cstIcms.getAliqRedBC());
+		grupo70.setvBC(cstIcms.getVlBc());
+		grupo70.setAliqICMS(cstIcms.getAliqIcms());
+		grupo70.setvICMS(cstIcms.getVlIcms());
+		grupo70.setModBCST(cstIcms.getmBcST());
+		grupo70.setAliqMVAST(cstIcms.getAliqMVAST());
+		grupo70.setAliqRedBCST(cstIcms.getAliqRedBCST());
+		grupo70.setvBCST(cstIcms.getVlBcST());
+		grupo70.setAliqICMSST(cstIcms.getAliqIcmsST());
+		grupo70.setvICMSST(cstIcms.getVlIcmsST());
+		grupo70.setvICMSDeson(cstIcms.getvICMSDeson());
+		grupo70.setMotDesICMS(cstIcms.getMotDesICMS());
 		tipo.setIcms70(grupo70);
 		return tipo;
 	}
@@ -480,6 +494,19 @@ public class ImpostoICMS {
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMS70().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMS70().getCST());
+			cst.setmBc(det.getImposto().getIcms().getICMS70().getModBC());
+			cst.setAliqRedBC(det.getImposto().getIcms().getICMS70().getPRedBC());
+			cst.setVlBc(det.getImposto().getIcms().getICMS70().getVBC());
+			cst.setAliqIcms(det.getImposto().getIcms().getICMS70().getPICMS());
+			cst.setVlIcms(det.getImposto().getIcms().getICMS70().getVICMS());
+			cst.setmBcST(det.getImposto().getIcms().getICMS70().getModBCST());
+			cst.setAliqMVAST(det.getImposto().getIcms().getICMS70().getPMVAST());
+			cst.setAliqRedBCST(det.getImposto().getIcms().getICMS70().getPRedBCST());	  
+			cst.setVlBcST(det.getImposto().getIcms().getICMS70().getVBCST());	
+			cst.setAliqIcmsST(det.getImposto().getIcms().getICMS70().getPICMSST());
+			cst.setVlIcmsST(det.getImposto().getIcms().getICMS70().getVICMSST());
+			cst.setvICMSDeson(det.getImposto().getIcms().getICMS70().getVICMSDeson());
+			cst.setMotDesICMS(det.getImposto().getIcms().getICMS70().getMotDesICMS());
 		}
 		return cst;
 	}
