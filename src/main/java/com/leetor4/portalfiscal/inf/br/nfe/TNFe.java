@@ -30617,6 +30617,9 @@ public class TNFe {
                 return dhSaiEnt;
             }
 
+            public String getDSaiEnt() {
+                return dSaiEnt;
+            }
             /**
              * Define o valor da propriedade dhSaiEnt.
              * 
@@ -30627,6 +30630,10 @@ public class TNFe {
              */
             public void setDhSaiEnt(String value) {
                 this.dhSaiEnt = value;
+            }
+            
+            public void setDSaiEnt(String value) {
+                this.dSaiEnt = value;
             }
 
             /**

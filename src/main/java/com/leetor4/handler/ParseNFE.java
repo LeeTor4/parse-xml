@@ -107,8 +107,14 @@ public class ParseNFE {
 			}else if(nfe.getNFe().getInfNFe().getIde().getDEmi() != null) {
 				ident.setDataEmissao(nfe.getNFe().getInfNFe().getIde().getDEmi());
 			}
-			//Ajustar Tag como acima
-			ident.setDataEntSai(nfe.getNFe().getInfNFe().getIde().getDhSaiEnt());
+			
+            if(nfe.getNFe().getInfNFe().getIde().getDhSaiEnt() != null) {
+            	ident.setDataEntSai(nfe.getNFe().getInfNFe().getIde().getDhSaiEnt());
+            }else if(nfe.getNFe().getInfNFe().getIde().getDSaiEnt() != null) {
+            	ident.setDataEntSai(nfe.getNFe().getInfNFe().getIde().getDSaiEnt());
+            	
+            }
+			
 			ident.setTipoNF(nfe.getNFe().getInfNFe().getIde().getTpNF());
 			ident.setIdDest(nfe.getNFe().getInfNFe().getIde().getIdDest());
 			ident.setCodigoMunFG(nfe.getNFe().getInfNFe().getIde().getCMunFG());
@@ -203,6 +209,8 @@ public class ParseNFE {
 									addCSOSN101.getCst().getCSOSN() != null) {
 								prod.setOrig(addCSOSN101.getCst().getCstA());
 								prod.setCst( addCSOSN101.getCst().getCSOSN());
+								prod.setAliqCredSN(addCSOSN101.getAliqpCredSN());
+								prod.setvCredICMSSN(addCSOSN101.getvCredICMSSN());
 							}else if(addCSOSN102_103_300_40.getCst().getCstA() != null &&
 									addCSOSN102_103_300_40.getCst().getCSOSN() != null) {
 								prod.setOrig(addCSOSN102_103_300_40.getCst().getCstA());
@@ -424,6 +432,10 @@ public class ParseNFE {
 									addCSOSN101.getCst().getCSOSN() != null) {
 								prod.setOrig(addCSOSN101.getCst().getCstA());
 								prod.setCst( addCSOSN101.getCst().getCSOSN());
+							
+								prod.setAliqCredSN(addCSOSN101.getAliqpCredSN());
+								prod.setvCredICMSSN(addCSOSN101.getvCredICMSSN());		
+								
 							}else if(addCSOSN102_103_300_40.getCst().getCstA() != null &&
 									addCSOSN102_103_300_40.getCst().getCSOSN() != null) {
 								prod.setOrig(addCSOSN102_103_300_40.getCst().getCstA());
@@ -882,6 +894,19 @@ public class ParseNFE {
 				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN101().getCst().getCSOSN());
 				
 			}
+			
+			if(grp_icms.getIcmsCSOSN101().getAliqpCredSN() != null) {
+				if(!grp_icms.getIcmsCSOSN101().getAliqpCredSN().isBlank()) {
+					grupo.setAliqpCredSN(grp_icms.getIcmsCSOSN101().getAliqpCredSN());
+				}
+			}
+			
+			if(grp_icms.getIcmsCSOSN101().getvCredICMSSN() != null) {
+				if(!grp_icms.getIcmsCSOSN101().getvCredICMSSN().isBlank()) {
+					grupo.setvCredICMSSN(grp_icms.getIcmsCSOSN101().getvCredICMSSN());				
+				}
+			}
+			
 		}
 		
 		return grupo;

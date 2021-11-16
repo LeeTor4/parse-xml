@@ -12,6 +12,10 @@ public class Produtos {
 	 private String orig;
 	 private String cst;
 	
+	 private String aliqCredSN;
+	 private String vCredICMSSN;
+	 
+	 
 	 private String modBc;
 	 private String aliqRedBc;
 	 private String vlBc;
@@ -120,6 +124,23 @@ public class Produtos {
 		this.cst = cst;
 	}
     
+	
+	public String getAliqCredSN() {
+		return aliqCredSN;
+	}
+
+	public void setAliqCredSN(String aliqCredSN) {
+		this.aliqCredSN = aliqCredSN;
+	}
+
+	public String getvCredICMSSN() {
+		return vCredICMSSN;
+	}
+
+	public void setvCredICMSSN(String vCredICMSSN) {
+		this.vCredICMSSN = vCredICMSSN;
+	}
+
 	public String getModBc() {
 		return modBc;
 	}
