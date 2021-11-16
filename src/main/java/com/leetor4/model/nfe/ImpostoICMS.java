@@ -216,7 +216,7 @@ public class ImpostoICMS {
 		Icms tipo = new Icms(cstIcms.getCstA(),cstIcms.getCstB());
 		grupo20.setCst(cstIcms);
 		grupo20.setModBC(cstIcms.getmBc());
-		grupo20.setAliqRedBC(cstIcms.getAliqRedBCST());
+		grupo20.setAliqRedBC(cstIcms.getAliqRedBC());
 		grupo20.setvBC(cstIcms.getVlBc());
 		grupo20.setAliqICMS(cstIcms.getAliqIcms());
 		grupo20.setvICMS(cstIcms.getVlIcms());
@@ -423,11 +423,21 @@ public class ImpostoICMS {
 		if (det.getImposto().getIcms().getICMS20() == null) {
 			cst.setCstA("");
 			cst.setCstB("");
+			cst.setmBc("");
+			cst.setAliqRedBC("");
+			cst.setVlBc("");
+			cst.setAliqIcms("");
+			cst.setVlIcms("");
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMS20().getOrig());
-			cst.setCstB(det.getImposto().getIcms().getICMS20().getCST());
-			cst.setmBc(det.getImposto().getIcms().getICMS20().getModBC());	
+			cst.setCstB(det.getImposto().getIcms().getICMS20().getCST());			
+			cst.setmBc(det.getImposto().getIcms().getICMS20().getModBC());
+			cst.setAliqRedBC(det.getImposto().getIcms().getICMS20().getPRedBC());
+			cst.setVlBc(det.getImposto().getIcms().getICMS20().getVBC());
+			cst.setAliqIcms(det.getImposto().getIcms().getICMS20().getPICMS());
+			cst.setVlIcms(det.getImposto().getIcms().getICMS20().getVICMS());
 			
+
 		}
 		return cst;
 	}
