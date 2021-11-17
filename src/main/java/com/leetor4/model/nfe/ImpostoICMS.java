@@ -341,10 +341,16 @@ public class ImpostoICMS {
 	}
 
 	private Icms getIcmsSN201(Det det, Object obj13) {
-		IcmsCSOSN201 grupoSN = (IcmsCSOSN201) obj13;
+		IcmsCSOSN201 grupoSN201 = (IcmsCSOSN201) obj13;
 		CstIcms cstIcms = getCstIcmsSN201(det);
 		Icms tipo = new Icms(cstIcms.getCstA(),cstIcms.getCstB());
-		tipo.setIcmsCSOSN201(grupoSN);
+		grupoSN201.setModBCST(cstIcms.getmBcST());
+		grupoSN201.setAliqMVAST(cstIcms.getAliqMVAST());
+		grupoSN201.setAliqRedBCST(cstIcms.getAliqRedBC());		
+		grupoSN201.setvBCST(cstIcms.getVlBcST());
+		grupoSN201.setAliqCredSN(cstIcms.getAliqCredSN());
+		grupoSN201.setvCredICMSSN(cstIcms.getvCredICMSSN());
+		tipo.setIcmsCSOSN201(grupoSN201);
 		return tipo;
 	}
 
@@ -357,18 +363,36 @@ public class ImpostoICMS {
 	}
 
 	private Icms getIcmsSN500(Det det, Object obj15) {
-		IcmsCSOSN500 grupoSN = (IcmsCSOSN500) obj15;
+		IcmsCSOSN500 grupoSN500 = (IcmsCSOSN500) obj15;
 		CstIcms cstIcms = getCstIcmsSN500(det);
 		Icms tipo = new Icms(cstIcms.getCstA(),cstIcms.getCstB());
-		tipo.setIcmsCSOSN500(grupoSN);
+		grupoSN500.setCst(cstIcms);
+		grupoSN500.setvBCSTRet(cstIcms.getVlBcSTRet());
+		grupoSN500.setvICMSSTRet(cstIcms.getVlIcmsSTRet());
+		tipo.setIcmsCSOSN500(grupoSN500);
 		return tipo;
 	}
 
 	private Icms getIcmsSN900(Det det, Object obj16) {
-		IcmsCSOSN900 grupoSN = (IcmsCSOSN900) obj16;
+		IcmsCSOSN900 grupoSN90 = (IcmsCSOSN900) obj16;
 		CstIcms cstIcms = getCstIcmsSN900(det);
 		Icms tipo = new Icms(cstIcms.getCstA(),cstIcms.getCstB());
-		tipo.setIcmsCSOSN900(grupoSN);
+		grupoSN90.setCst(cstIcms);
+		grupoSN90.setModBC(cstIcms.getmBc());
+		grupoSN90.setvBC(cstIcms.getVlBc());
+		grupoSN90.setAliqRedBC(cstIcms.getAliqRedBC());
+		grupoSN90.setAliqICMS(cstIcms.getAliqIcms());
+		grupoSN90.setvICMS(cstIcms.getVlIcms());
+		grupoSN90.setModBCST(cstIcms.getmBcST());
+		grupoSN90.setAliqMVAST(cstIcms.getAliqMVAST());
+		grupoSN90.setAliqRedBCST(cstIcms.getAliqRedBC());		
+		grupoSN90.setvBCST(cstIcms.getVlBcST());
+		grupoSN90.setAliqIcmsST(cstIcms.getAliqIcmsST());
+		grupoSN90.setVlIcmsST(cstIcms.getVlIcmsST());
+		grupoSN90.setAliqCredSN(cstIcms.getAliqCredSN());
+		grupoSN90.setvCredICMSSN(cstIcms.getvCredICMSSN());
+		
+		tipo.setIcmsCSOSN900(grupoSN90);
 		return tipo;
 	}
 
@@ -450,6 +474,13 @@ public class ImpostoICMS {
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMS30().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMS30().getCST());
+			
+			cst.setmBcST(det.getImposto().getIcms().getICMS30().getModBCST());
+			cst.setAliqMVAST(det.getImposto().getIcms().getICMS30().getPMVAST());
+			cst.setAliqRedBCST(det.getImposto().getIcms().getICMS30().getPRedBCST());	  
+			cst.setVlBcST(det.getImposto().getIcms().getICMS30().getVBCST());	
+			cst.setAliqIcmsST(det.getImposto().getIcms().getICMS30().getPICMSST());
+			cst.setVlIcmsST(det.getImposto().getIcms().getICMS30().getVICMSST());
 		}
 		return cst;
 	}
@@ -475,6 +506,11 @@ public class ImpostoICMS {
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMS51().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMS51().getCST());
+			cst.setmBc(det.getImposto().getIcms().getICMS51().getModBC());
+			cst.setAliqRedBC(det.getImposto().getIcms().getICMS51().getPRedBC());
+			cst.setVlBc(det.getImposto().getIcms().getICMS51().getVBC());
+			cst.setAliqIcms(det.getImposto().getIcms().getICMS51().getPICMS());
+			cst.setVlIcms(det.getImposto().getIcms().getICMS51().getVICMS());
 		}
 		return cst;
 	}
@@ -554,6 +590,21 @@ public class ImpostoICMS {
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMSPart().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMSPart().getCST());
+			
+			cst.setmBc(det.getImposto().getIcms().getICMSPart().getModBC());
+			cst.setAliqRedBC(det.getImposto().getIcms().getICMSPart().getPRedBC());
+			cst.setVlBc(det.getImposto().getIcms().getICMSPart().getVBC());
+			cst.setAliqIcms(det.getImposto().getIcms().getICMSPart().getPICMS());
+			cst.setVlIcms(det.getImposto().getIcms().getICMSPart().getVICMS());
+			cst.setmBcST(det.getImposto().getIcms().getICMSPart().getModBCST());
+			cst.setAliqMVAST(det.getImposto().getIcms().getICMSPart().getPMVAST());
+			cst.setAliqRedBCST(det.getImposto().getIcms().getICMSPart().getPRedBCST());	  
+			cst.setVlBcST(det.getImposto().getIcms().getICMSPart().getVBCST());	
+			cst.setAliqIcmsST(det.getImposto().getIcms().getICMSPart().getPICMSST());
+			cst.setVlIcmsST(det.getImposto().getIcms().getICMSPart().getVICMSST());
+			
+			cst.setAliqBCOp(det.getImposto().getIcms().getICMSPart().getPBCOp());
+			//verificar aqui a variavel tUF
 		}
 		return cst;
 	}
@@ -566,6 +617,12 @@ public class ImpostoICMS {
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMSST().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMSST().getCST());
+			
+			cst.setVlBcSTRet(det.getImposto().getIcms().getICMSST().getVBCSTRet());
+			cst.setVlIcmsSTRet(det.getImposto().getIcms().getICMSST().getVICMSSTRet());
+			
+			cst.setVlBcSTDest(det.getImposto().getIcms().getICMSST().getVBCSTDest());
+			cst.setVlIcmsSTDest(det.getImposto().getIcms().getICMSST().getVICMSSTDest());
 		}
 		return cst;
 	}
@@ -607,6 +664,14 @@ public class ImpostoICMS {
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMSSN201().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMSSN201().getCSOSN());
+			
+			cst.setmBcST(det.getImposto().getIcms().getICMSSN201().getModBCST());
+			cst.setAliqMVAST(det.getImposto().getIcms().getICMSSN201().getPMVAST());
+			cst.setAliqRedBCST(det.getImposto().getIcms().getICMSSN201().getPRedBCST());
+			cst.setVlBcST(det.getImposto().getIcms().getICMSSN201().getVBCST());
+			cst.setVlIcmsST(det.getImposto().getIcms().getICMSSN201().getVICMSST());
+			cst.setAliqCredSN(det.getImposto().getIcms().getICMSSN201().getPCredSN());
+			cst.setvCredICMSSN(det.getImposto().getIcms().getICMSSN201().getVCredICMSSN());
 		}
 		return cst;
 	}
@@ -619,6 +684,11 @@ public class ImpostoICMS {
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMSSN202().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMSSN202().getCSOSN());
+			cst.setmBcST(det.getImposto().getIcms().getICMSSN202().getModBCST());
+			cst.setAliqMVAST(det.getImposto().getIcms().getICMSSN202().getPMVAST());
+			cst.setAliqRedBCST(det.getImposto().getIcms().getICMSSN202().getPRedBCST());
+			cst.setVlBcST(det.getImposto().getIcms().getICMSSN202().getVBCST());
+			cst.setVlIcmsST(det.getImposto().getIcms().getICMSSN202().getVICMSST());
 		}
 		return cst;
 	}
@@ -631,7 +701,12 @@ public class ImpostoICMS {
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMSSN500().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMSSN500().getCSOSN());
-		}
+			cst.setVlBcSTRet(det.getImposto().getIcms().getICMSSN500().getVBCSTRet());
+			cst.setVlIcmsSTRet(det.getImposto().getIcms().getICMSSN500().getVICMSSTRet());
+	    }
+		
+		
+		
 		return cst;
 	}
 
@@ -643,6 +718,18 @@ public class ImpostoICMS {
 		} else {
 			cst.setCstA(det.getImposto().getIcms().getICMSSN900().getOrig());
 			cst.setCstB(det.getImposto().getIcms().getICMSSN900().getCSOSN());
+			cst.setmBc(det.getImposto().getIcms().getICMSSN900().getModBC());
+			cst.setVlBc(det.getImposto().getIcms().getICMSSN900().getVBC());
+			cst.setAliqRedBC(det.getImposto().getIcms().getICMSSN900().getPRedBC());
+			cst.setAliqIcms(det.getImposto().getIcms().getICMSSN900().getPICMS());
+			cst.setVlIcms(det.getImposto().getIcms().getICMSSN900().getVICMS());
+			cst.setmBcST(det.getImposto().getIcms().getICMSSN900().getModBCST());
+			cst.setAliqMVAST(det.getImposto().getIcms().getICMSSN900().getPMVAST());
+			cst.setAliqRedBCST(det.getImposto().getIcms().getICMSSN900().getPRedBCST());
+			cst.setVlBcST(det.getImposto().getIcms().getICMSSN900().getVBCST());
+			cst.setVlIcmsST(det.getImposto().getIcms().getICMSSN900().getVICMSST());
+			cst.setAliqCredSN(det.getImposto().getIcms().getICMSSN900().getPCredSN());
+			cst.setvCredICMSSN(det.getImposto().getIcms().getICMSSN900().getVCredICMSSN());
 		}
 		return cst;
 	}

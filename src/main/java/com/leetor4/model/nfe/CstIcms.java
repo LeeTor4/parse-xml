@@ -20,11 +20,17 @@ public class CstIcms {
 	private String aliqIcmsST;
 	private String aliqRedBCST;
 	private String vlIcmsST;
+	
+	private String aliqBCOp;
+	private String ufST;
+	
 	private String vICMSDeson;
 	private String motDesICMS;
 	
 	private String vlBcSTRet;
 	private String vlIcmsSTRet;
+	private String vlBcSTDest;
+	private String vlIcmsSTDest;
 	
 	private String aliqCredSN;
 	private String vCredICMSSN;
@@ -156,6 +162,30 @@ public class CstIcms {
 	}
 	public void setAliqRedBC(String aliqRedBC) {
 		this.aliqRedBC = aliqRedBC;
+	}
+	public String getVlBcSTDest() {
+		return vlBcSTDest;
+	}
+	public void setVlBcSTDest(String vlBcSTDest) {
+		this.vlBcSTDest = vlBcSTDest;
+	}
+	public String getVlIcmsSTDest() {
+		return vlIcmsSTDest;
+	}
+	public void setVlIcmsSTDest(String vlIcmsSTDest) {
+		this.vlIcmsSTDest = vlIcmsSTDest;
+	}
+	public String getAliqBCOp() {
+		return aliqBCOp;
+	}
+	public void setAliqBCOp(String aliqBCOp) {
+		this.aliqBCOp = aliqBCOp;
+	}
+	public String getUfST() {
+		return ufST;
+	}
+	public void setUfST(String ufST) {
+		this.ufST = ufST;
 	}
 	
 	

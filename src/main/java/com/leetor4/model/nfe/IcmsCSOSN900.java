@@ -13,6 +13,8 @@ public class IcmsCSOSN900 {
 	 private String aliqMVAST;
 	 private String aliqRedBCST;
 	 private String vBCST;
+	 private String aliqIcmsST;
+	 private String vlIcmsST;
 	 private String aliqCredSN;
 	 private String vCredICMSSN;
 	 
@@ -132,6 +134,23 @@ public class IcmsCSOSN900 {
 	public void setvCredICMSSN(String vCredICMSSN) {
 		this.vCredICMSSN = vCredICMSSN;
 	}
-	 
+
+	public String getAliqIcmsST() {
+		return aliqIcmsST;
+	}
+
+	public void setAliqIcmsST(String aliqIcmsST) {
+		this.aliqIcmsST = aliqIcmsST;
+	}
+
+	public String getVlIcmsST() {
+		return vlIcmsST;
+	}
+
+	public void setVlIcmsST(String vlIcmsST) {
+		this.vlIcmsST = vlIcmsST;
+	}
+	
+	
 	 
 }
