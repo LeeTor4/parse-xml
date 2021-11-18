@@ -7,6 +7,8 @@ public class IcmsCSOSN500 {
 	 private String vBCSTRet;
 	 private String vICMSSTRet;
 	 
+	 private String reg = "icmssn500";
+	 
 	 public IcmsCSOSN500() {
 		
 	}
@@ -40,6 +42,10 @@ public class IcmsCSOSN500 {
 
 	public void setvICMSSTRet(String vICMSSTRet) {
 		this.vICMSSTRet = vICMSSTRet;
+	}
+
+	public String getReg() {
+		return reg;
 	}
 	 
 	

@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +32,7 @@ import com.leetor4.model.nfe.Icms70;
 import com.leetor4.model.nfe.Icms90;
 import com.leetor4.model.nfe.IcmsCSOSN101;
 import com.leetor4.model.nfe.IcmsCSOSN102_103_300_400;
+import com.leetor4.model.nfe.IcmsCSOSN500;
 import com.leetor4.model.nfe.Identificacao;
 import com.leetor4.model.nfe.ImpostoICMS;
 import com.leetor4.model.nfe.ImpostoNFE;
@@ -46,7 +46,8 @@ import com.leetor4.portalfiscal.inf.br.nfe.TNFe.InfNFe.Det.Imposto.ICMS;
 import com.leetor4.portalfiscal.inf.br.nfe.TNFe.InfNFe.Det.Imposto.PIS;
 import com.leetor4.portalfiscal.inf.br.nfe.TNFe.InfNFe.Det.Prod.Rastro;
 import com.leetor4.portalfiscal.inf.br.nfe.TNfeProc;
-import com.leetor4.util.UtilsEConverters;
+import com.leetor4.portalfiscal.inf.br.nfe.TUf;
+import com.leetor4.portalfiscal.inf.br.nfe.TUfEmi;
 
 public class ParseNFE {
 
@@ -126,17 +127,47 @@ public class ParseNFE {
 			ident.setProcessoEmissao(nfe.getNFe().getInfNFe().getIde().getProcEmi());
 			ident.setVersaoProcesso(nfe.getNFe().getInfNFe().getIde().getVerProc());
 	
-			
 			Emitente emit = new Emitente();
 
 			emit.setCnpj(nfe.getNFe().getInfNFe().getEmit().getCNPJ());
 			emit.setNome(nfe.getNFe().getInfNFe().getEmit().getXNome());
-
+			
+			emit.getEnd().setLogradouro(nfe.getNFe().getInfNFe().getEmit().getEnderEmit().getXLgr());
+			emit.getEnd().setNumero(nfe.getNFe().getInfNFe().getEmit().getEnderEmit().getNro());
+			emit.getEnd().setBairro(nfe.getNFe().getInfNFe().getEmit().getEnderEmit().getXBairro());
+			emit.getEnd().setCodMun(nfe.getNFe().getInfNFe().getEmit().getEnderEmit().getCMun());
+			emit.getEnd().setDescMun(nfe.getNFe().getInfNFe().getEmit().getEnderEmit().getXMun());
+			
+			TUfEmi ufEmit = nfe.getNFe().getInfNFe().getEmit().getEnderEmit().getUF();			
+			emit.getEnd().setUf(Enum.valueOf(TUfEmi.class, ufEmit.name()).toString());
+				
+			emit.getEnd().setCep(nfe.getNFe().getInfNFe().getEmit().getEnderEmit().getCEP());
+			emit.getEnd().setCodPais(nfe.getNFe().getInfNFe().getEmit().getEnderEmit().getCPais());
+			emit.getEnd().setFone(nfe.getNFe().getInfNFe().getEmit().getEnderEmit().getFone());
+			
+			emit.setIe(nfe.getNFe().getInfNFe().getEmit().getIE());
+			emit.setCrt(nfe.getNFe().getInfNFe().getEmit().getCRT());
+			
 			Destinatario dest = new Destinatario();
 
 			dest.setCnpj(nfe.getNFe().getInfNFe().getDest().getCNPJ());
 			dest.setNome(nfe.getNFe().getInfNFe().getDest().getXNome());
+			
+			dest.getEnd().setLogradouro(nfe.getNFe().getInfNFe().getDest().getEnderDest().getXLgr());
+			dest.getEnd().setNumero(nfe.getNFe().getInfNFe().getDest().getEnderDest().getNro());
+			dest.getEnd().setBairro(nfe.getNFe().getInfNFe().getDest().getEnderDest().getXBairro());
+			dest.getEnd().setCodMun(nfe.getNFe().getInfNFe().getDest().getEnderDest().getCMun());
+			dest.getEnd().setDescMun(nfe.getNFe().getInfNFe().getDest().getEnderDest().getXMun());
+			
+			TUf  ufDest = nfe.getNFe().getInfNFe().getDest().getEnderDest().getUF();			
+			dest.getEnd().setUf(Enum.valueOf(TUf.class, ufDest.name()).toString());
+				
+			dest.getEnd().setCep(nfe.getNFe().getInfNFe().getDest().getEnderDest().getCEP());
+			dest.getEnd().setCodPais(nfe.getNFe().getInfNFe().getDest().getEnderDest().getCPais());
+			dest.getEnd().setFone(nfe.getNFe().getInfNFe().getDest().getEnderDest().getFone());
+			
 			dest.setIe(nfe.getNFe().getInfNFe().getDest().getIE());
+			
 
 			nf.setIdent(ident);
 			nf.setEmitente(emit);
@@ -178,7 +209,7 @@ public class ParseNFE {
 							Icms90       addICMS90 = addICMS90(field, grp_icms);
 							IcmsCSOSN102_103_300_400 addCSOSN102_103_300_40 = addCSOSN102_103_300_400(field, grp_icms);
 							IcmsCSOSN101  addCSOSN101  = addCSOSN101(field, grp_icms);
-							
+							IcmsCSOSN500 addCsosn500   = addIcmsCSON500(field, grp_icms);
 							
 							
 							if(addICMS00.getCst().getCstA() != null && addICMS00.getCst().getCstB() != null) {
@@ -225,6 +256,12 @@ public class ParseNFE {
 									addCSOSN102_103_300_40.getCst().getCSOSN() != null) {
 								prod.setOrig(addCSOSN102_103_300_40.getCst().getCstA());
 								prod.setCst( addCSOSN102_103_300_40.getCst().getCSOSN());
+							}else if(addCsosn500.getCst().getCstA() != null &&
+									addCsosn500.getCst().getCSOSN() != null) {
+								
+								prod.setOrig(addCsosn500.getCst().getCstA());
+								prod.setCst( addCsosn500.getCst().getCSOSN());
+								
 							}
 							
 							
@@ -356,18 +393,45 @@ public class ParseNFE {
 			ident.setProcessoEmissao(nfe.getInfNFe().getIde().getProcEmi());
 			ident.setVersaoProcesso(nfe.getInfNFe().getIde().getVerProc());
 
-			
-			
-			
 			Emitente emit = new Emitente();
 
 			emit.setCnpj(nfe.getInfNFe().getEmit().getCNPJ());
 			emit.setNome(nfe.getInfNFe().getEmit().getXNome());
-
+			
+			emit.getEnd().setLogradouro(nfe.getInfNFe().getEmit().getEnderEmit().getXLgr());
+			emit.getEnd().setNumero(nfe.getInfNFe().getEmit().getEnderEmit().getNro());
+			emit.getEnd().setBairro(nfe.getInfNFe().getEmit().getEnderEmit().getXBairro());
+			emit.getEnd().setCodMun(nfe.getInfNFe().getEmit().getEnderEmit().getCMun());
+			emit.getEnd().setDescMun(nfe.getInfNFe().getEmit().getEnderEmit().getXMun());
+			
+			TUfEmi uf = nfe.getInfNFe().getEmit().getEnderEmit().getUF();			
+			emit.getEnd().setUf(Enum.valueOf(TUfEmi.class, uf.name()).toString());
+				
+			emit.getEnd().setCep(nfe.getInfNFe().getEmit().getEnderEmit().getCEP());
+			emit.getEnd().setCodPais(nfe.getInfNFe().getEmit().getEnderEmit().getCPais());
+			emit.getEnd().setFone(nfe.getInfNFe().getEmit().getEnderEmit().getFone());
+            
+			emit.setIe(nfe.getInfNFe().getEmit().getIE());
+			
 			Destinatario dest = new Destinatario();
 
 			dest.setCnpj(nfe.getInfNFe().getDest().getCNPJ());
 			dest.setNome(nfe.getInfNFe().getDest().getXNome());
+			
+			dest.getEnd().setLogradouro(nfe.getInfNFe().getDest().getEnderDest().getXLgr());
+			dest.getEnd().setNumero(nfe.getInfNFe().getDest().getEnderDest().getNro());
+			dest.getEnd().setBairro(nfe.getInfNFe().getDest().getEnderDest().getXBairro());
+			dest.getEnd().setCodMun(nfe.getInfNFe().getDest().getEnderDest().getCMun());
+			dest.getEnd().setDescMun(nfe.getInfNFe().getDest().getEnderDest().getXMun());
+			
+			TUf  ufDest = nfe.getInfNFe().getDest().getEnderDest().getUF();			
+			dest.getEnd().setUf(Enum.valueOf(TUf.class, ufDest.name()).toString());
+				
+			dest.getEnd().setCep(nfe.getInfNFe().getDest().getEnderDest().getCEP());
+			dest.getEnd().setCodPais(nfe.getInfNFe().getDest().getEnderDest().getCPais());
+			dest.getEnd().setFone(nfe.getInfNFe().getDest().getEnderDest().getFone());
+			
+			
 			dest.setIe(nfe.getInfNFe().getDest().getIE());
 
 			nf.setIdent(ident);
@@ -411,7 +475,7 @@ public class ParseNFE {
 							Icms90       addICMS90 = addICMS90(field, grp_icms);
 							IcmsCSOSN102_103_300_400 addCSOSN102_103_300_40 = addCSOSN102_103_300_400(field, grp_icms);
 							IcmsCSOSN101  addCSOSN101  = addCSOSN101(field, grp_icms);
-							
+							IcmsCSOSN500 addCsosn500   = addIcmsCSON500(field, grp_icms);
 							
 							if(addICMS00.getCst().getCstA() != null && addICMS00.getCst().getCstB() != null) {
 								prod.setOrig(addICMS00.getCst().getCstA());
@@ -460,6 +524,10 @@ public class ParseNFE {
 									addCSOSN102_103_300_40.getCst().getCSOSN() != null) {
 								prod.setOrig(addCSOSN102_103_300_40.getCst().getCstA());
 								prod.setCst( addCSOSN102_103_300_40.getCst().getCSOSN());
+							}else if(addCsosn500.getCst().getCstA() != null &&
+									addCsosn500.getCst().getCSOSN() != null) {
+								prod.setOrig(addCsosn500.getCst().getCstA());
+								prod.setCst( addCsosn500.getCst().getCSOSN());
 							}
 						
 							
@@ -919,8 +987,8 @@ public class ParseNFE {
 				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN101().getCst().getCstA());
 			}
 			
-			if(!grp_icms.getIcmsCSOSN101().getCst().getCSOSN().isBlank()) {
-				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN101().getCst().getCSOSN());
+			if(!grp_icms.getIcmsCSOSN101().getCst().getCstB().isBlank()) {
+				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN101().getCst().getCstB());
 				
 			}
 			
@@ -949,8 +1017,8 @@ public class ParseNFE {
 				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA());
 			}
 			
-			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN().isBlank()) {
-				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN());
+			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB().isBlank()) {
+				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB());
 				
 			}
 		}
@@ -961,8 +1029,8 @@ public class ParseNFE {
 				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA());
 			}
 			
-			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN().isBlank()) {
-				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN());
+			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB().isBlank()) {
+				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB());
 				
 			}
 		}
@@ -973,8 +1041,8 @@ public class ParseNFE {
 				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA());
 			}
 			
-			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN().isBlank()) {
-				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN());
+			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB().isBlank()) {
+				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB());
 				
 			}
 		}
@@ -985,11 +1053,30 @@ public class ParseNFE {
 				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA());
 			}
 			
-			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN().isBlank()) {
-				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCSOSN());
+			if(!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB().isBlank()) {
+				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB());
 				
 			}
 		}
+		
+		return grupo;
+	}
+	
+	private IcmsCSOSN500 addIcmsCSON500(Field field,Icms grp_icms) {
+		IcmsCSOSN500 grupo = new IcmsCSOSN500();
+		
+		  if(field.getName().equals( grp_icms.getIcmsCSOSN500().getReg())) {
+			  
+			  if(!grp_icms.getIcmsCSOSN500().getCst().getCstA().isBlank()) {
+					grupo.getCst().setCstA(grp_icms.getIcmsCSOSN500().getCst().getCstA());
+				}
+				
+				if(!grp_icms.getIcmsCSOSN500().getCst().getCstB().isBlank()) {
+					grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN500().getCst().getCstB());
+					
+				}
+			  
+		  }
 		
 		return grupo;
 	}

@@ -25,7 +25,7 @@ public class JAXBMain {
 		
 		File diretorio  = new File("D:\\XML");
 		Path dirDest    = Paths.get("D:\\xml-servidor");
-		String dest     = "D:\\Benelux_Ent_202109.xlsx";
+		String dest     = "D:\\Matriz_Saidas_202106.xlsx";
 		
 		ParseNFE parse = new ParseNFE();
 		
@@ -34,7 +34,7 @@ public class JAXBMain {
 		XSSFSheet sheet = workbook.createSheet("Notas Saidas");
         RelacaoNotasFiscais relacao = new RelacaoNotasFiscais();
         //relacao.relacaoNotasFiscais(diretorio);
-        String operacao = "E";
+        String operacao = "S";
         relacao.exporaNotasFiscais(relacao.relacaoNotasFiscais(diretorio,operacao), workbook, sheet, dest);
         
         String cnpj = "";
