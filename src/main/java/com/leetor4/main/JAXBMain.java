@@ -11,9 +11,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.leetor4.handler.CopiarArquivosXMLDePastaOrigDest;
-import com.leetor4.handler.ParseNFE;
+import com.leetor4.handler.ParseDocXML;
 import com.leetor4.model.nfe.Icms;
-import com.leetor4.model.nfe.NotaFiscal;
+import com.leetor4.model.nfe.DocumentoFiscalEltronico;
 import com.leetor4.model.nfe.Produtos;
 import com.leetor4.model.system.RelacaoNotasFiscais;
 
@@ -27,7 +27,7 @@ public class JAXBMain {
 		Path dirDest    = Paths.get("D:\\xml-servidor");
 		String dest     = "D:\\Matriz_Saidas_202106.xlsx";
 		
-		ParseNFE parse = new ParseNFE();
+		ParseDocXML parse = new ParseDocXML();
 		
 		
 		XSSFWorkbook workbook = new XSSFWorkbook();

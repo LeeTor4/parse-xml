@@ -17,6 +17,9 @@ public class UtilsEConverters {
 			  DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
 	
+	private static DateTimeFormatter formatter3 = 
+			  DateTimeFormatter.ofPattern("yyyyMMdd");
+	
     public static String getDataParaString2(LocalDate data) {
 		
 		String dtFormatada = formatter2.format(data);
@@ -24,8 +27,23 @@ public class UtilsEConverters {
 		return dtFormatada;
 	}
     
+    public static String getDataParaString3(LocalDate data) {
+		
+		String dtFormatada = formatter3.format(data);
+		//System.out.println(dtFormatada);
+		return dtFormatada;
+	}
+    
 	public static LocalDate getStringParaData(String data) {
-		TemporalAccessor parse = formatter.parse(data);
+		TemporalAccessor parse = formatter.parse(data.substring(0,10));
+		LocalDate from = LocalDate.from(parse);
+		//System.out.println(from);
+		return from;
+	}
+	
+	public static LocalDate getStringParaData3(String data) {
+		
+		TemporalAccessor parse = formatter3.parse(data);
 		LocalDate from = LocalDate.from(parse);
 		//System.out.println(from);
 		return from;

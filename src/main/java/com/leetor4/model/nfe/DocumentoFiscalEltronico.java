@@ -3,7 +3,7 @@ package com.leetor4.model.nfe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotaFiscal {
+public class DocumentoFiscalEltronico {
 
 	private Identificacao ident = new Identificacao();
 	
