@@ -3,6 +3,7 @@ package com.leetor4.model.system;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +15,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFDataFormat;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -39,16 +43,16 @@ public class RelacaoNotasFiscais {
 	    Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
 	    data.put(indice, 
 	    new Object[]
-	    {"ID","OPERACAO","CHAVE","UF","COD_DOC","NAT_OPERAÇÃO","MODELO_DOC","SERIE","NUM_DOC","DT_EMISSAO","DT_ENTSAI","TIPO_DOC","ID_DEST","COD_MUN_FG","TP_IMP","TP_EMI","C_DV","TP_AMB","FIN_EMI","PROC_EMI","VER_PROC",
+	    {"ID","OPERACAO","CHAVE","UF","COD_DOC","NAT_OPERAÇÃO","MODELO_DOC","NUM_CX","NUM_SERIESAT","SERIE","NUM_DOC","DT_EMISSAO","DT_ENTSAI","TIPO_DOC","ID_DEST","COD_MUN_FG","TP_IMP","TP_EMI","C_DV","TP_AMB","FIN_EMI","PROC_EMI","VER_PROC",
 	    "CNPJ_EMIT","NOME_EMIT","LOGRADOURO_EMIT","NUM_EMIT","BAIRRO_EMIT","CODIGO_EMIT","MUNICIPIO_EMIT","UF_EMIT","CEP_EMIT","CODPAIS_EMIT","FONE_EMIT","IE_EMIT", 
 	    "CNPJ_DEST","NOME_DEST","LOGRADOURO_DEST","NUM_DEST","BAIRRO_DEST","CODIGO_DEST","MUNICIPIO_DEST","UF_DEST","CEP_DEST","CODPAIS_DEST","FONE_DEST","IE_DEST",
 	    "NUM_ITEM","COD_ITEM","DESCRIÇAO","NCM","CFOP","ORIG","CST_ICMS",
 	    "ALIQ_CRED_SN","VL_CRED_ICMSSN","MOD_BC","ALIQ_RED_BC","VL_BC","ALIQ_ICMS","VL_ICMS","MOD_BC_ST","ALIQ_MVAST","ALIQ_RED_BC_ST","VL_BC_ST","ALIQ_ICMS_ST","VL_ICMS_ST","VL_ICMS_DESON","MOT_DESON_ICMS",
-	    "CST_PIS","CST_COFINS",
-	    "UND_COMERCIAL","QTD_COMERCIAL","VL_UND_COMERCIAL","VL_PRODUTO",
+	    "CST_PIS","VBC_PIS","ALIQ_PIS","VL_PIS","CST_COFINS",
+	    "UND_COMERCIAL","QTD_COMERCIAL","VL_UND_COMERCIAL","VL_PRODUTO","IND_REGRA","VL_DESC","VL_ITEM",
 	    "COD_EAN_TRIB","UND_TRIB","QTD_TRIB","VL_UNID_TRIB","IND_TOT","NUM_LOTE","QTDE_LOTE","FAB_LOTE","VAL_LOTE",
 	    "VL_BC","VL_ICMS","VL_ICMS_DESON","VL_FCP","VL_BC_CST","VL_ST","VL_FCP_ST","VL_FCP_ST_RET","VL_PROD","VL_FRETE","VL_SEG","VL_DESC","VL_II",
-	    "VL_IPI","VL_IPI_DEVOL","VL_PIS","VL_COFINS","VL_OUTROS","VL_NF"});		
+	    "VL_IPI","VL_IPI_DEVOL","VL_PIS","VL_COFINS","VL_OUTROS","VL_NF","VL_CFE"});		
 		ParseDocXML parse = new ParseDocXML();
 		for(DocumentoFiscalEltronico n : parse.validaTipoDeParseNFE(diretorio)){
 			for(Produtos p: n.getProds()){
@@ -126,8 +130,10 @@ public class RelacaoNotasFiscais {
 		        		 n.getIdent().getCodigoNF(),
 		        		 n.getIdent().getNaturezaOperacao(),
 		        		 n.getIdent().getModeloDoc(),
+		        		 n.getIdent().getNumeroCaixa(),
+		        		 n.getIdent().getNumSerieSAT(),
 		        		 n.getIdent().getSerie(),
-		        		 n.getIdent().getNumDoc() ,
+		        		 n.getIdent().getNumDoc(),
 		        		
 		        		 dtEmi,
 		        		 (n.getIdent().getDataEntSai()==null?"":UtilsEConverters.getStringParaData(n.getIdent().getDataEntSai())),
@@ -175,36 +181,44 @@ public class RelacaoNotasFiscais {
 		        		 p.getCst(),
 		        		 (p.getAliqCredSN()==null?"":Double.valueOf(p.getAliqCredSN())),
 		        		 (p.getvCredICMSSN()==null?"":Double.valueOf(p.getvCredICMSSN())),
-		        		 p.getModBc(),
+		        		  p.getModBc(),
 		        		 (p.getAliqRedBc()==null?"":Double.valueOf(p.getAliqRedBc())),
 		        		 (p.getVlBc()==null?"":Double.valueOf(p.getVlBc())),
 		        		 (p.getAliqIcms()==null?"":Double.valueOf(p.getAliqIcms())),
 		        		 (p.getVlIcms()==null?"": Double.valueOf(p.getVlIcms())),
-		        		 p.getModBcST(),
+		        		  p.getModBcST(),
 		        		 (p.getAliqMVAST()==null?"":Double.valueOf(p.getAliqMVAST())),
 		        		 (p.getAliqRedBCST()==null?"":Double.valueOf(p.getAliqRedBCST())),
 		        		 (p.getVlBcST()==null?"":Double.valueOf(p.getVlBcST())),
 		        		 (p.getAliqIcmsST()==null?"":Double.valueOf(p.getAliqIcmsST())),
 		        		 (p.getVlIcmsST()==null?"":Double.valueOf(p.getVlIcmsST())),
 		        		 (p.getVlIcmsDeson()==null?"":Double.valueOf(p.getVlIcmsDeson())),
-		        		 p.getMotDesICMS(),
-		        		 p.getCstPis() ,
-		        		 p.getCstCofins(),
-		        		 p.getUndComercial(), 
+		        		  p.getMotDesICMS(),
+		        		 
+		        		  p.getCstPis() ,
+		        		  (p.getVlBcPis()==null?"":Double.valueOf(p.getVlBcPis())),
+		        		  (p.getAliqPis()==null?"":Double.valueOf(p.getAliqPis())),
+		        		  (p.getvPIS()==null?"":Double.valueOf(p.getvPIS())),
+		        		   p.getCstCofins(),
+
+		        		  p.getUndComercial(), 
 		        		 (p.getQtdComercial()==null?"":Double.valueOf(p.getQtdComercial())),
 		        		 (p.getQtdComercial()==null?"":Double.valueOf(p.getVlUnComerial())),
 		        		 (p.getVlProduto()==null?"":Double.valueOf(p.getVlProduto())),
-		        		 p.getCodEanTrib(), 
+		        		  p.getIndRegra(),
+		        		 (p.getvDesc()==null?"":Double.valueOf(p.getvDesc())),
+		        		 (p.getVlItem()==null?"":Double.valueOf(p.getVlItem())),
+		        		  p.getCodEanTrib(), 
 		        		 (p.getUndTrib()==null?"":Double.valueOf(p.getUndTrib())), 
 		        		 (p.getQtdTrib()==null?"":Double.valueOf(p.getQtdTrib())),
 		        		 (p.getVlUnTrib()==null?"":Double.valueOf(p.getVlUnTrib())), 
-		        		 p.getIndTot(), 
-		        		 p.getRastro().getNumLote(), 
+		        		  p.getIndTot(), 
+		        		  p.getRastro().getNumLote(), 
 		        		 (p.getRastro().getQtdLote() == null ? "" :Double.valueOf( p.getRastro().getQtdLote())),
-		        		 p.getRastro().getDtFab(),
-		        		 p.getRastro().getDtVal(),
+		        		  p.getRastro().getDtFab(),
+		        		  p.getRastro().getDtVal(),
 		        		 (n.getTotal().getIcmsTot().getVlBc()==null?"":Double.valueOf(n.getTotal().getIcmsTot().getVlBc())),
- 				         ( n.getTotal().getIcmsTot().getVlIcms()==null?"":Double.valueOf( n.getTotal().getIcmsTot().getVlIcms())),
+ 				         (n.getTotal().getIcmsTot().getVlIcms()==null?"":Double.valueOf( n.getTotal().getIcmsTot().getVlIcms())),
  				         (n.getTotal().getIcmsTot().getVlIcmsDeson()==null?"": Double.valueOf(n.getTotal().getIcmsTot().getVlIcmsDeson())),
  				         (n.getTotal().getIcmsTot().getVlFCP() == null ?"": Double.valueOf(n.getTotal().getIcmsTot().getVlFCP())),
  				         (n.getTotal().getIcmsTot().getVlBCST()==null?"":Double.valueOf(n.getTotal().getIcmsTot().getVlBCST())),
@@ -221,7 +235,8 @@ public class RelacaoNotasFiscais {
  				         (n.getTotal().getIcmsTot().getVlPIS()==null?"": Double.valueOf(n.getTotal().getIcmsTot().getVlPIS())), 
  				         (n.getTotal().getIcmsTot().getVlCOFINS()==null?"":Double.valueOf(n.getTotal().getIcmsTot().getVlCOFINS())),
  				         (n.getTotal().getIcmsTot().getVlOutro()==null?"": Double.valueOf(n.getTotal().getIcmsTot().getVlOutro())), 
- 				         (n.getTotal().getIcmsTot().getVlNF()==null?"":Double.valueOf(n.getTotal().getIcmsTot().getVlNF()))});
+ 				         (n.getTotal().getIcmsTot().getVlNF()==null?"":Double.valueOf(n.getTotal().getIcmsTot().getVlNF())),
+ 				         (n.getTotal().getvCFe()==null?"":Double.valueOf(n.getTotal().getvCFe()))});
 			}
 			
 
@@ -230,14 +245,14 @@ public class RelacaoNotasFiscais {
 		return data;
 	}
 	
-	public void exporaNotasFiscais(Map<Integer, Object[]> data,XSSFWorkbook workbook,XSSFSheet sheet,
-			     String path) {
+	public void exporaNotasFiscais(Map<Integer, Object[]> data,SXSSFWorkbook workbook,SXSSFSheet  sheet,
+			String path) {
 		
-		
+		workbook.setCompressTempFiles(true);
 		DataFormat format = workbook.createDataFormat();
 		CellStyle cs = workbook.createCellStyle();
 		CellStyle csNum = workbook.createCellStyle();
-		XSSFDataFormat df = workbook.createDataFormat();
+		XSSFDataFormat df = (XSSFDataFormat) workbook.createDataFormat();
 		cs.setDataFormat(df.getFormat("dd/mm/yyyy"));
 		
 		csNum.setDataFormat(format.getFormat("0.0"));

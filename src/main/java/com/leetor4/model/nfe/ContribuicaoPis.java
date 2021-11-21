@@ -48,6 +48,10 @@ public class ContribuicaoPis {
 		PisAliq pisAliq = (PisAliq) obj1;
 		CstPisCofins cst = getCstPisAliq(det);
 		Pis tipo = new Pis(cst.getCodigo());
+		pisAliq.setCst(cst);
+		pisAliq.setvBC(cst.getVlBc());
+		pisAliq.setAliqPIS(cst.getAliqPis());
+		pisAliq.setvPIS(cst.getVlPis());
 		tipo.setPisAliq(pisAliq);
 		return tipo;
 	}
@@ -84,6 +88,9 @@ public class ContribuicaoPis {
 			
 		} else {
 			cst.setCodigo(det.getImposto().getPis().getPISAliq().getCST());
+			cst.setVlBc(det.getImposto().getPis().getPISAliq().getVBC());
+			cst.setAliqPis(det.getImposto().getPis().getPISAliq().getPPIS());
+			cst.setVlPis(det.getImposto().getPis().getPISAliq().getVPIS());
 			
 		}
 		return cst;

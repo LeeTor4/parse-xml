@@ -1,5 +1,6 @@
 package com.leetor4.util;
 
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
@@ -55,7 +56,7 @@ public class UtilsEConverters {
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(new Locale("pt","Brazil"));
         dfs.setDecimalSeparator(',');
         dfs.setGroupingSeparator('.');
-        df = new DecimalFormat(padrao,dfs);
+        df = new DecimalFormat(padrao, dfs);
         
         return df.format(formato);
 	}

@@ -104,6 +104,8 @@ public class ParseDocXML {
 			ident.setCodigoUF(cfe.getInfCFe().getIde().getCUF());
 			ident.setNaturezaOperacao("Venda - Emissor de Cupom Fiscal - ECF");
 			ident.setModeloDoc(cfe.getInfCFe().getIde().getMod());
+			ident.setNumSerieSAT(cfe.getInfCFe().getIde().getNserieSAT());
+			ident.setNumeroCaixa(cfe.getInfCFe().getIde().getNumeroCaixa());
 			ident.setNumDoc(cfe.getInfCFe().getIde().getNCFe());
 			
 			if (cfe.getInfCFe().getIde().getDEmi() != null) {
@@ -145,6 +147,9 @@ public class ParseDocXML {
 				prod.setQtdComercial(det.getProd().getQCom());
 				prod.setVlUnComerial(det.getProd().getVUnCom());
 				prod.setVlProduto(det.getProd().getVProd());
+				prod.setIndRegra(det.getProd().getIndRegra());
+				prod.setvDesc(det.getProd().getVDesc());
+				prod.setVlItem(det.getProd().getVItem());
 				
 				
 				com.leetor4.portalfiscal.inf.br.cfe.EnvTeste.CFe.InfCFe.Det.Imposto.ICMS icms = det.getImposto().getICMS();
@@ -189,7 +194,7 @@ public class ParseDocXML {
 			nf.getTotal().getIcmsTot().setVlPIS(cfe.getInfCFe().getTotal().getICMSTot().getVPIS());
 			nf.getTotal().getIcmsTot().setVlCOFINS(cfe.getInfCFe().getTotal().getICMSTot().getVCOFINS());
 			nf.getTotal().getIcmsTot().setVlOutro(cfe.getInfCFe().getTotal().getICMSTot().getVOutro());
-			
+			nf.getTotal().setvCFe(cfe.getInfCFe().getTotal().getVCFe());
 			notas.add(nf);
 		}
 		
@@ -305,7 +310,8 @@ public class ParseDocXML {
 				prod.setQtdTrib(det.getProd().getQTrib());
 				prod.setVlUnTrib(det.getProd().getVUnTrib());
 				prod.setIndTot(det.getProd().getIndTot());
-
+				prod.setvDesc(det.getProd().getVDesc());	
+				
 				ICMS icms = det.getImposto().getIcms();
 				Field[] fieldsICMS = icms.getClass().getDeclaredFields();
 				for (Field field : fieldsICMS) {
@@ -417,6 +423,11 @@ public class ParseDocXML {
 					Pis grp_pis = contribPis.contribuicaoPis(field.getName(), det, imp);
 					if (!grp_pis.getCst().isBlank()) {
 						prod.setCstPis(grp_pis.getCst());
+						prod.setVlBcPis(grp_pis.getPisAliq().getvBC());
+						prod.setAliqPis(grp_pis.getPisAliq().getAliqPIS());
+						prod.setvPIS(grp_pis.getPisAliq().getvPIS());
+						
+						System.out.println(field.getName());
 					}
 
 					prod.getImps().setPis(grp_pis);
@@ -558,7 +569,8 @@ public class ParseDocXML {
 				prod.setQtdTrib(det.getProd().getQTrib());
 				prod.setVlUnTrib(det.getProd().getVUnTrib());
 				prod.setIndTot(det.getProd().getIndTot());
-
+				prod.setvDesc(det.getProd().getVDesc());	
+				
 				ICMS icms = det.getImposto().getIcms();
 				Field[] fieldsICMS = icms.getClass().getDeclaredFields();
 				for (Field field : fieldsICMS) {
@@ -671,7 +683,12 @@ public class ParseDocXML {
 
 					Pis grp_pis = contribPis.contribuicaoPis(field.getName(), det, imp);
 					if (!grp_pis.getCst().isBlank()) {
+						
 						prod.setCstPis(grp_pis.getCst());
+						prod.setVlBcPis(grp_pis.getPisAliq().getvBC());
+						prod.setAliqPis(grp_pis.getPisAliq().getAliqPIS());
+						prod.setvPIS(grp_pis.getPisAliq().getvPIS());
+
 					}
 
 					prod.getImps().setPis(grp_pis);

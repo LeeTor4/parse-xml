@@ -8,6 +8,8 @@ public class Identificacao {
 	private String naturezaOperacao;
 	private String modeloDoc;
 	private String serie;
+	private String numSerieSAT;
+	private String numeroCaixa;
 	private String numDoc;
 	private String dataEmissao;
 	private String dataEntSai;
@@ -57,6 +59,20 @@ public class Identificacao {
 	}
 	public void setSerie(String serie) {
 		this.serie = serie;
+	}
+	
+	public String getNumSerieSAT() {
+		return numSerieSAT;
+	}
+	public void setNumSerieSAT(String numSerieSAT) {
+		this.numSerieSAT = numSerieSAT;
+	}
+	
+	public String getNumeroCaixa() {
+		return numeroCaixa;
+	}
+	public void setNumeroCaixa(String numeroCaixa) {
+		this.numeroCaixa = numeroCaixa;
 	}
 	public String getNumDoc() {
 		return numDoc;

@@ -5,21 +5,26 @@ public class CofinsAliq {
 	private CstPisCofins cst = new CstPisCofins();
 	
 	private String vBC;
-	private String aliqPIS;
-	private String vPIS;
+	private String aliqCofins;
+	private String vCofins;
 	
+
+	private String qBCProd;
+	private String vAliqProd;
+
+	private String reg = "cofinsAliq";
 	
 	public CofinsAliq() {
 		
 	}
 
 
-	public CofinsAliq(CstPisCofins cst, String vBC, String aliqPIS, String vPIS) {
+	public CofinsAliq(CstPisCofins cst, String vBC, String aliqCofins, String vCofins) {
 		super();
 		this.cst = cst;
 		this.vBC = vBC;
-		this.aliqPIS = aliqPIS;
-		this.vPIS = vPIS;
+		this.aliqCofins = aliqCofins;
+		this.vCofins = vCofins;
 	}
 
 
@@ -33,16 +38,60 @@ public class CofinsAliq {
 	}
 
 
-	public String getAliqPIS() {
-		return aliqPIS;
+	public String getAliqCofins() {
+		return aliqCofins;
 	}
 
 
-	public String getvPIS() {
-		return vPIS;
+	public void setAliqCofins(String aliqCofins) {
+		this.aliqCofins = aliqCofins;
 	}
-	
-	
-	
 
+
+	public String getvCofins() {
+		return vCofins;
+	}
+
+
+	public void setvCofins(String vCofins) {
+		this.vCofins = vCofins;
+	}
+
+
+	public String getqBCProd() {
+		return qBCProd;
+	}
+
+
+	public void setqBCProd(String qBCProd) {
+		this.qBCProd = qBCProd;
+	}
+
+
+	public String getvAliqProd() {
+		return vAliqProd;
+	}
+
+
+	public void setvAliqProd(String vAliqProd) {
+		this.vAliqProd = vAliqProd;
+	}
+
+
+	public void setCst(CstPisCofins cst) {
+		this.cst = cst;
+	}
+
+
+	public void setvBC(String vBC) {
+		this.vBC = vBC;
+	}
+
+
+	public String getReg() {
+		return reg;
+	}
+
+    
+	
 }

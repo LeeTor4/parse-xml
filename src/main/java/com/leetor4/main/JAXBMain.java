@@ -1,12 +1,16 @@
 package com.leetor4.main;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -29,12 +33,12 @@ public class JAXBMain {
 		
 		ParseDocXML parse = new ParseDocXML();
 		
-		
-		XSSFWorkbook workbook = new XSSFWorkbook();
-		XSSFSheet sheet = workbook.createSheet("Notas Saidas");
+		SXSSFWorkbook workbook = new SXSSFWorkbook(10000);
+		SXSSFSheet  sheet = workbook.createSheet("Notas Saidas");
         RelacaoNotasFiscais relacao = new RelacaoNotasFiscais();
         //relacao.relacaoNotasFiscais(diretorio);
         String operacao = "S";
+       
         relacao.exporaNotasFiscais(relacao.relacaoNotasFiscais(diretorio,operacao), workbook, sheet, dest);
         
         String cnpj = "";

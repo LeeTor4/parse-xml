@@ -32,12 +32,32 @@ public class Produtos {
 	 private String vlIcmsDeson;
 	 private String motDesICMS;
 	 private String vlIcmsSTRet;
+	
 	 private String cstPis;
 	 private String cstCofins;
+	
+	 private String vlBcPis;
+	 private String aliqPis;
+	 private String vlPis;
+	 private String qBCProdPis;
+	 private String vAliqProdPis;
+	 private String vPIS;
+	 
+	 private String vlBcCofins;
+	 private String aliqCofins;
+	 private String vlCofins;
+	 private String qBCProdCofins;
+	 private String vAliqProdCofins;
+	 private String vCofins;
+		
 	 private String undComercial;
 	 private String qtdComercial;
 	 private String vlUnComerial;
 	 private String vlProduto;
+	 private String indRegra;
+	 private String vDesc;
+	 private String vlItem;
+	 
 	 private String codEanTrib;
 	 private String undTrib;
 	 private String qtdTrib;
@@ -253,7 +273,32 @@ public class Produtos {
 		this.vlProduto = vlProduto;
 	 }
 
-	 public String getCodEanTrib() {
+	 
+	 public String getIndRegra() {
+		return indRegra;
+	}
+
+	public void setIndRegra(String indRegra) {
+		this.indRegra = indRegra;
+	}
+
+	public String getvDesc() {
+		return vDesc;
+	}
+
+	public void setvDesc(String vDesc) {
+		this.vDesc = vDesc;
+	}
+
+	public String getVlItem() {
+		return vlItem;
+	}
+
+	public void setVlItem(String vlItem) {
+		this.vlItem = vlItem;
+	}
+
+	public String getCodEanTrib() {
 		return codEanTrib;
 	 }
 
@@ -371,6 +416,102 @@ public class Produtos {
 
 	public void setMotDesICMS(String motDesICMS) {
 		this.motDesICMS = motDesICMS;
+	}
+
+	public String getVlBcPis() {
+		return vlBcPis;
+	}
+
+	public void setVlBcPis(String vlBcPis) {
+		this.vlBcPis = vlBcPis;
+	}
+
+	public String getAliqPis() {
+		return aliqPis;
+	}
+
+	public void setAliqPis(String aliqPis) {
+		this.aliqPis = aliqPis;
+	}
+
+	public String getVlPis() {
+		return vlPis;
+	}
+
+	public void setVlPis(String vlPis) {
+		this.vlPis = vlPis;
+	}
+
+	public String getqBCProdPis() {
+		return qBCProdPis;
+	}
+
+	public void setqBCProdPis(String qBCProdPis) {
+		this.qBCProdPis = qBCProdPis;
+	}
+
+	public String getvAliqProdPis() {
+		return vAliqProdPis;
+	}
+
+	public void setvAliqProdPis(String vAliqProdPis) {
+		this.vAliqProdPis = vAliqProdPis;
+	}
+
+	public String getvPIS() {
+		return vPIS;
+	}
+
+	public void setvPIS(String vPIS) {
+		this.vPIS = vPIS;
+	}
+
+	public String getVlBcCofins() {
+		return vlBcCofins;
+	}
+
+	public void setVlBcCofins(String vlBcCofins) {
+		this.vlBcCofins = vlBcCofins;
+	}
+
+	public String getAliqCofins() {
+		return aliqCofins;
+	}
+
+	public void setAliqCofins(String aliqCofins) {
+		this.aliqCofins = aliqCofins;
+	}
+
+	public String getVlCofins() {
+		return vlCofins;
+	}
+
+	public void setVlCofins(String vlCofins) {
+		this.vlCofins = vlCofins;
+	}
+
+	public String getqBCProdCofins() {
+		return qBCProdCofins;
+	}
+
+	public void setqBCProdCofins(String qBCProdCofins) {
+		this.qBCProdCofins = qBCProdCofins;
+	}
+
+	public String getvAliqProdCofins() {
+		return vAliqProdCofins;
+	}
+
+	public void setvAliqProdCofins(String vAliqProdCofins) {
+		this.vAliqProdCofins = vAliqProdCofins;
+	}
+
+	public String getvCofins() {
+		return vCofins;
+	}
+
+	public void setvCofins(String vCofins) {
+		this.vCofins = vCofins;
 	}
 	
 	
