@@ -2,12 +2,22 @@ package com.leetor4.model.nfe;
 
 public class Destinatario {
 
+	private String cpf;
 	private String cnpj;
 	private String nome;
 	private String ie;
     private String indIEDest;
 
 	private Endereco end = new Endereco();
+
+	
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
 
 	public String getCnpj() {
 		return cnpj;

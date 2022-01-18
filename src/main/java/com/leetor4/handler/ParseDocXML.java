@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
@@ -68,6 +69,7 @@ public class ParseDocXML {
 		JAXBContext     contexto2  = JAXBContext.newInstance("com.leetor4.portalfiscal.inf.br.cfe");
 		Unmarshaller leituraXMLCFe = contexto2.createUnmarshaller();
 		
+
 		for (File arquivo : arquivos) {
 			File xmlFile = new File(arquivo.toString());
 			BufferedReader br = new BufferedReader(new FileReader(xmlFile));
@@ -76,11 +78,26 @@ public class ParseDocXML {
 
 				// if (line.contains("<Signature")) {}
 				if (line.contains("<nfeProc")) {
-					parseNFeV3_10(notas, arquivo, leituraXML);
+					
+					try {
+						parseNFeV3_10(notas, arquivo, leituraXML);
+					}catch (UnmarshalException e) {
+						System.out.println("Erro de prologo " + e.getMessage());
+					}
 				} else if (line.contains("<NFe")) {
-					parseNFeV4_00(notas, arquivo, leituraXML);
+					try {
+						parseNFeV4_00(notas, arquivo, leituraXML);
+					}catch (UnmarshalException e) {
+						System.out.println("Erro de prologo " + e.getMessage());
+					}
+				
 				}else if (line.contains("<CFe")) {
-					parseCFeV00_7(notas, arquivo, leituraXMLCFe);
+					try {
+						parseCFeV00_7(notas, arquivo, leituraXMLCFe);
+					}catch (UnmarshalException e) {
+						System.out.println("Erro de prologo " + e.getMessage());
+					}
+					
 				} else {
 					System.out.println("Não Importada");
 				}
@@ -138,6 +155,7 @@ public class ParseDocXML {
 				Produtos prod = new Produtos();
 				ImpostoNFE imp = new ImpostoNFE();
 			
+				
 				prod.setNumItem(det.getNItem());
 				prod.setCodItem(det.getProd().getCProd());
 				prod.setDescricao(det.getProd().getXProd());
@@ -187,14 +205,35 @@ public class ParseDocXML {
 				nf.adicionarProdutos(prod);
 			}
 			
+			if(cfe.getInfCFe().getTotal() != null) {
+				if(cfe.getInfCFe().getTotal().getICMSTot() != null) {
+		            if(cfe.getInfCFe().getTotal().getICMSTot().getVICMS() != null) {
+		            	nf.getTotal().getIcmsTot().setVlIcms(cfe.getInfCFe().getTotal().getICMSTot().getVICMS());
+		            }
+					if(cfe.getInfCFe().getTotal().getICMSTot().getVProd() != null) {
+						nf.getTotal().getIcmsTot().setVlProd(cfe.getInfCFe().getTotal().getICMSTot().getVProd());	
+					}
+					if(cfe.getInfCFe().getTotal().getICMSTot().getVDesc() != null) {
+						nf.getTotal().getIcmsTot().setVlDesc(cfe.getInfCFe().getTotal().getICMSTot().getVDesc());
+					}
+					if(cfe.getInfCFe().getTotal().getICMSTot().getVPIS() != null){
+						nf.getTotal().getIcmsTot().setVlPIS(cfe.getInfCFe().getTotal().getICMSTot().getVPIS());
+					}
+					if(cfe.getInfCFe().getTotal().getICMSTot().getVCOFINS() != null) {
+						nf.getTotal().getIcmsTot().setVlCOFINS(cfe.getInfCFe().getTotal().getICMSTot().getVCOFINS());
+					}
+					if(cfe.getInfCFe().getTotal().getICMSTot().getVOutro() != null) {
+						nf.getTotal().getIcmsTot().setVlOutro(cfe.getInfCFe().getTotal().getICMSTot().getVOutro());
+					}
+				}
+				
+				 if(cfe.getInfCFe().getTotal().getVCFe() != null) {
+				    	nf.getTotal().setvCFe(cfe.getInfCFe().getTotal().getVCFe());
+				 }
+			}
 
-			nf.getTotal().getIcmsTot().setVlIcms(cfe.getInfCFe().getTotal().getICMSTot().getVICMS());
-			nf.getTotal().getIcmsTot().setVlProd(cfe.getInfCFe().getTotal().getICMSTot().getVProd());
-			nf.getTotal().getIcmsTot().setVlDesc(cfe.getInfCFe().getTotal().getICMSTot().getVDesc());
-			nf.getTotal().getIcmsTot().setVlPIS(cfe.getInfCFe().getTotal().getICMSTot().getVPIS());
-			nf.getTotal().getIcmsTot().setVlCOFINS(cfe.getInfCFe().getTotal().getICMSTot().getVCOFINS());
-			nf.getTotal().getIcmsTot().setVlOutro(cfe.getInfCFe().getTotal().getICMSTot().getVOutro());
-			nf.getTotal().setvCFe(cfe.getInfCFe().getTotal().getVCFe());
+		   
+			
 			notas.add(nf);
 		}
 		
@@ -269,7 +308,9 @@ public class ParseDocXML {
 
 			Destinatario dest = new Destinatario();
 
+			dest.setCpf(nfe.getNFe().getInfNFe().getDest().getCPF());
 			dest.setCnpj(nfe.getNFe().getInfNFe().getDest().getCNPJ());
+			
 			dest.setNome(nfe.getNFe().getInfNFe().getDest().getXNome());
 
 			dest.getEnd().setLogradouro(nfe.getNFe().getInfNFe().getDest().getEnderDest().getXLgr());
@@ -421,13 +462,13 @@ public class ParseDocXML {
 				for (Field field : fieldsPIS) {
 
 					Pis grp_pis = contribPis.contribuicaoPis(field.getName(), det, imp);
-					if (!grp_pis.getCst().isBlank()) {
+					if (!grp_pis.getCst().isEmpty()) {
 						prod.setCstPis(grp_pis.getCst());
 						prod.setVlBcPis(grp_pis.getPisAliq().getvBC());
 						prod.setAliqPis(grp_pis.getPisAliq().getAliqPIS());
 						prod.setvPIS(grp_pis.getPisAliq().getvPIS());
 						
-						System.out.println(field.getName());
+						
 					}
 
 					prod.getImps().setPis(grp_pis);
@@ -438,7 +479,7 @@ public class ParseDocXML {
 				for (Field field : fieldsCofins) {
 
 					Cofins grp_cofins = contribCofins.contribuicaoPis(field.getName(), det, imp);
-					if (!grp_cofins.getCst().isBlank()) {
+					if (!grp_cofins.getCst().isEmpty()) {
 						prod.setCstCofins(grp_cofins.getCst());
 					}
 
@@ -529,6 +570,7 @@ public class ParseDocXML {
 
 			Destinatario dest = new Destinatario();
 
+			dest.setCpf(nfe.getInfNFe().getDest().getCPF());
 			dest.setCnpj(nfe.getInfNFe().getDest().getCNPJ());
 			dest.setNome(nfe.getInfNFe().getDest().getXNome());
 
@@ -672,7 +714,7 @@ public class ParseDocXML {
 							prod.setMotDesICMS(addICMS70.getMotDesICMS());
 						}
 
-						// System.out.println(field.getName());
+						
 					}
 
 				}
@@ -682,7 +724,7 @@ public class ParseDocXML {
 				for (Field field : fieldsPIS) {
 
 					Pis grp_pis = contribPis.contribuicaoPis(field.getName(), det, imp);
-					if (!grp_pis.getCst().isBlank()) {
+					if (!grp_pis.getCst().isEmpty()) {
 						
 						prod.setCstPis(grp_pis.getCst());
 						prod.setVlBcPis(grp_pis.getPisAliq().getvBC());
@@ -699,7 +741,7 @@ public class ParseDocXML {
 				for (Field field : fieldsCofins) {
 
 					Cofins grp_cofins = contribCofins.contribuicaoPis(field.getName(), det, imp);
-					if (!grp_cofins.getCst().isBlank()) {
+					if (!grp_cofins.getCst().isEmpty()) {
 						prod.setCstCofins(grp_cofins.getCst());
 					}
 
@@ -756,6 +798,7 @@ public class ParseDocXML {
 						|| line.contains("<orig>".concat(orig).concat("</orig>"))
 						|| line.contains("<CST>".concat(cst).concat("</CST>"))
 						|| line.contains("<nNF>".concat(numDoc).concat("</nNF>"))
+						|| line.contains("<nCFe>".concat(numDoc).concat("</nCFe>"))
 						|| line.contains("<CFOP>".concat(cfop).concat("</CFOP>"))) {
 
 					Path pOrig = Paths.get(xmlFile.getPath());
@@ -778,33 +821,33 @@ public class ParseDocXML {
 		Icms00 icms00 = new Icms00();
 		if (field.getName().equals(grp_icms.getIcms00().getReg())) {
 
-			if (!grp_icms.getIcms00().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcms00().getCst().getCstA().isEmpty()) {
 				icms00.getCst().setCstA(grp_icms.getIcms00().getCst().getCstA());
 
 			}
-			if (!grp_icms.getIcms00().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcms00().getCst().getCstB().isEmpty()) {
 				icms00.getCst().setCstB(grp_icms.getIcms00().getCst().getCstB());
 			}
 			
 			if(grp_icms.getIcms00().getModBC() != null) {
-				if (!grp_icms.getIcms00().getModBC().isBlank()) {
+				if (!grp_icms.getIcms00().getModBC().isEmpty()) {
 					icms00.setModBC(grp_icms.getIcms00().getModBC());
 				}
 			}
 
 			if(grp_icms.getIcms00().getvBC() != null) {
-				if (!grp_icms.getIcms00().getvBC().isBlank()) {
+				if (!grp_icms.getIcms00().getvBC().isEmpty()) {
 					icms00.setvBC(grp_icms.getIcms00().getvBC());
 				}
 			}
             if(grp_icms.getIcms00().getAliqImp() != null) {
-    			if (!grp_icms.getIcms00().getAliqImp().isBlank()) {
+    			if (!grp_icms.getIcms00().getAliqImp().isEmpty()) {
     				icms00.setAliqImp(grp_icms.getIcms00().getAliqImp());
     			}
             }
             
             if(grp_icms.getIcms00().getvICMS() != null) {
-    			if (!grp_icms.getIcms00().getvICMS().isBlank()) {
+    			if (!grp_icms.getIcms00().getvICMS().isEmpty()) {
     				icms00.setvICMS(grp_icms.getIcms00().getvICMS());
     			}
             }
@@ -819,27 +862,27 @@ public class ParseDocXML {
 		Icms10 icms10 = new Icms10();
 		if (field.getName().equals(grp_icms.getIcms10().getReg())) {
 
-			if (!grp_icms.getIcms10().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcms10().getCst().getCstA().isEmpty()) {
 				icms10.getCst().setCstA(grp_icms.getIcms10().getCst().getCstA());
 			}
 
-			if (!grp_icms.getIcms10().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcms10().getCst().getCstB().isEmpty()) {
 				icms10.getCst().setCstB(grp_icms.getIcms10().getCst().getCstB());
 			}
 
-			if (!grp_icms.getIcms10().getModBC().isBlank()) {
+			if (!grp_icms.getIcms10().getModBC().isEmpty()) {
 				icms10.setModBC(grp_icms.getIcms10().getModBC());
 			}
 
-			if (!grp_icms.getIcms10().getvBC().isBlank()) {
+			if (!grp_icms.getIcms10().getvBC().isEmpty()) {
 				icms10.setvBC(grp_icms.getIcms10().getvBC());
 			}
 
-			if (!grp_icms.getIcms10().getAliqImp().isBlank()) {
+			if (!grp_icms.getIcms10().getAliqImp().isEmpty()) {
 				icms10.setAliqImp(grp_icms.getIcms10().getAliqImp());
 			}
 
-			if (!grp_icms.getIcms10().getvICMS().isBlank()) {
+			if (!grp_icms.getIcms10().getvICMS().isEmpty()) {
 				icms10.setvICMS(grp_icms.getIcms10().getvICMS());
 			}
 
@@ -865,39 +908,39 @@ public class ParseDocXML {
 
 		if (field.getName().equals(grp_icms.getIcms20().getReg())) {
 
-			if (!grp_icms.getIcms20().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcms20().getCst().getCstA().isEmpty()) {
 				icms20.getCst().setCstA(grp_icms.getIcms20().getCst().getCstA());
 			}
 
-			if (!grp_icms.getIcms20().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcms20().getCst().getCstB().isEmpty()) {
 				icms20.getCst().setCstB(grp_icms.getIcms20().getCst().getCstB());
 			}
 			if (grp_icms.getIcms20().getModBC() != null) {
-				if (!grp_icms.getIcms20().getModBC().isBlank()) {
+				if (!grp_icms.getIcms20().getModBC().isEmpty()) {
 					icms20.setModBC(grp_icms.getIcms20().getModBC());
 				}
 			}
 			if (grp_icms.getIcms20().getAliqRedBC() != null) {
-				if (!grp_icms.getIcms20().getAliqRedBC().isBlank()) {
+				if (!grp_icms.getIcms20().getAliqRedBC().isEmpty()) {
 					icms20.setAliqRedBC(grp_icms.getIcms20().getAliqRedBC());
 				}
 			}
 
 			if (grp_icms.getIcms20().getvBC() != null) {
-				if (!grp_icms.getIcms20().getvBC().isBlank()) {
+				if (!grp_icms.getIcms20().getvBC().isEmpty()) {
 					icms20.setvBC(grp_icms.getIcms20().getvBC());
 				}
 			}
 
 			if (grp_icms.getIcms20().getAliqICMS() != null) {
-				if (!grp_icms.getIcms20().getAliqICMS().isBlank()) {
+				if (!grp_icms.getIcms20().getAliqICMS().isEmpty()) {
 					icms20.setAliqICMS(grp_icms.getIcms20().getAliqICMS());
 				}
 
 			}
 
 			if (grp_icms.getIcms20().getvICMS() != null) {
-				if (!grp_icms.getIcms20().getvICMS().isBlank()) {
+				if (!grp_icms.getIcms20().getvICMS().isEmpty()) {
 					icms20.setvICMS(grp_icms.getIcms20().getvICMS());
 				}
 
@@ -911,11 +954,11 @@ public class ParseDocXML {
 		Icms40_41_50 icms40_41_50 = new Icms40_41_50();
 		if (field.getName().equals(grp_icms.getIcms40_41_50().getReg())) {
 
-			if (!grp_icms.getIcms40_41_50().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcms40_41_50().getCst().getCstA().isEmpty()) {
 				icms40_41_50.getCst().setCstA(grp_icms.getIcms40_41_50().getCst().getCstA());
 			}
 
-			if (!grp_icms.getIcms40_41_50().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcms40_41_50().getCst().getCstB().isEmpty()) {
 				icms40_41_50.getCst().setCstB(grp_icms.getIcms40_41_50().getCst().getCstB());
 
 			}
@@ -935,10 +978,10 @@ public class ParseDocXML {
 		Icms60 icms60 = new Icms60();
 		if (field.getName().equals(grp_icms.getIcms60().getReg())) {
 
-			if (!grp_icms.getIcms60().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcms60().getCst().getCstA().isEmpty()) {
 				icms60.getCst().setCstA(grp_icms.getIcms60().getCst().getCstA());
 			}
-			if (!grp_icms.getIcms60().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcms60().getCst().getCstB().isEmpty()) {
 				icms60.getCst().setCstB(grp_icms.getIcms60().getCst().getCstB());
 			}
 
@@ -959,83 +1002,83 @@ public class ParseDocXML {
 
 		if (field.getName().equals(grp_icms.getIcms70().getReg())) {
 
-			if (!grp_icms.getIcms70().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcms70().getCst().getCstA().isEmpty()) {
 				icms70.getCst().setCstA(grp_icms.getIcms70().getCst().getCstA());
 			}
-			if (!grp_icms.getIcms70().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcms70().getCst().getCstB().isEmpty()) {
 				icms70.getCst().setCstB(grp_icms.getIcms70().getCst().getCstB());
 			}
 
 			if (grp_icms.getIcms70().getModBC() != null) {
-				if (!grp_icms.getIcms70().getModBC().isBlank()) {
+				if (!grp_icms.getIcms70().getModBC().isEmpty()) {
 					icms70.setModBC(grp_icms.getIcms70().getModBC());
 				}
 			}
 
 			if (grp_icms.getIcms70().getAliqRedBC() != null) {
-				if (!grp_icms.getIcms70().getAliqRedBC().isBlank()) {
+				if (!grp_icms.getIcms70().getAliqRedBC().isEmpty()) {
 					icms70.setAliqRedBC(grp_icms.getIcms70().getAliqRedBC());
 				}
 			}
 
 			if (grp_icms.getIcms70().getvBC() != null) {
-				if (!grp_icms.getIcms70().getvBC().isBlank()) {
+				if (!grp_icms.getIcms70().getvBC().isEmpty()) {
 					icms70.setvBC(grp_icms.getIcms70().getvBC());
 				}
 			}
 
 			if (grp_icms.getIcms70().getAliqICMS() != null) {
-				if (!grp_icms.getIcms70().getAliqICMS().isBlank()) {
+				if (!grp_icms.getIcms70().getAliqICMS().isEmpty()) {
 					icms70.setAliqICMS(grp_icms.getIcms70().getAliqICMS());
 				}
 			}
 
 			if (grp_icms.getIcms70().getvICMS() != null) {
-				if (!grp_icms.getIcms70().getvICMS().isBlank()) {
+				if (!grp_icms.getIcms70().getvICMS().isEmpty()) {
 					icms70.setvICMS(grp_icms.getIcms70().getvICMS());
 				}
 			}
 
 			if (grp_icms.getIcms70().getModBCST() != null) {
-				if (!grp_icms.getIcms70().getModBCST().isBlank()) {
+				if (!grp_icms.getIcms70().getModBCST().isEmpty()) {
 					icms70.setModBCST(grp_icms.getIcms70().getModBCST());
 				}
 			}
 
 			if (grp_icms.getIcms70().getAliqMVAST() != null) {
-				if (!grp_icms.getIcms70().getAliqMVAST().isBlank()) {
+				if (!grp_icms.getIcms70().getAliqMVAST().isEmpty()) {
 					icms70.setAliqMVAST(grp_icms.getIcms70().getAliqMVAST());
 				}
 			}
 
 			if (grp_icms.getIcms70().getAliqRedBCST() != null) {
-				if (!grp_icms.getIcms70().getAliqRedBCST().isBlank()) {
+				if (!grp_icms.getIcms70().getAliqRedBCST().isEmpty()) {
 					icms70.setAliqRedBCST(grp_icms.getIcms70().getAliqRedBCST());
 				}
 			}
 			if (grp_icms.getIcms70().getvBCST() != null) {
-				if (!grp_icms.getIcms70().getvBCST().isBlank()) {
+				if (!grp_icms.getIcms70().getvBCST().isEmpty()) {
 					icms70.setvBCST(grp_icms.getIcms70().getvBCST());
 				}
 			}
 			if (grp_icms.getIcms70().getAliqICMSST() != null) {
-				if (!grp_icms.getIcms70().getAliqICMSST().isBlank()) {
+				if (!grp_icms.getIcms70().getAliqICMSST().isEmpty()) {
 					icms70.setAliqICMSST(grp_icms.getIcms70().getAliqICMSST());
 				}
 			}
 			if (grp_icms.getIcms70().getvICMSST() != null) {
-				if (!grp_icms.getIcms70().getvICMSST().isBlank()) {
+				if (!grp_icms.getIcms70().getvICMSST().isEmpty()) {
 					icms70.setvICMSST(grp_icms.getIcms70().getvICMSST());
 				}
 			}
 			if (grp_icms.getIcms70().getvICMSDeson() != null) {
-				if (!grp_icms.getIcms70().getvICMSDeson().isBlank()) {
+				if (!grp_icms.getIcms70().getvICMSDeson().isEmpty()) {
 					icms70.setvICMSDeson(grp_icms.getIcms70().getvICMSDeson());
 					;
 				}
 			}
 			if (grp_icms.getIcms70().getMotDesICMS() != null) {
-				if (!grp_icms.getIcms70().getMotDesICMS().isBlank()) {
+				if (!grp_icms.getIcms70().getMotDesICMS().isEmpty()) {
 					icms70.setMotDesICMS(grp_icms.getIcms70().getMotDesICMS());
 				}
 			}
@@ -1050,29 +1093,29 @@ public class ParseDocXML {
 		Icms90 icms90 = new Icms90();
 		if (field.getName().equals(grp_icms.getIcms90().getReg())) {
 
-			if (!grp_icms.getIcms90().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcms90().getCst().getCstA().isEmpty()) {
 				icms90.getCst().setCstA(grp_icms.getIcms90().getCst().getCstA());
 			}
-			if (!grp_icms.getIcms90().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcms90().getCst().getCstB().isEmpty()) {
 				icms90.getCst().setCstB(grp_icms.getIcms90().getCst().getCstB());
 			}
 			if (grp_icms.getIcms90().getModBC() != null) {
-				if (!grp_icms.getIcms90().getModBC().isBlank()) {
+				if (!grp_icms.getIcms90().getModBC().isEmpty()) {
 					icms90.setModBC(grp_icms.getIcms90().getModBC());
 				}
 			}
 			if (grp_icms.getIcms90().getvBC() != null) {
-				if (!grp_icms.getIcms90().getvBC().isBlank()) {
+				if (!grp_icms.getIcms90().getvBC().isEmpty()) {
 					icms90.setvBC(grp_icms.getIcms90().getvBC());
 				}
 			}
 			if (grp_icms.getIcms90().getAliqICMS() != null) {
-				if (!grp_icms.getIcms90().getAliqICMS().isBlank()) {
+				if (!grp_icms.getIcms90().getAliqICMS().isEmpty()) {
 					icms90.setAliqICMS(grp_icms.getIcms90().getAliqICMS());
 				}
 			}
 			if (grp_icms.getIcms90().getvICMS() != null) {
-				if (!grp_icms.getIcms90().getvICMS().isBlank()) {
+				if (!grp_icms.getIcms90().getvICMS().isEmpty()) {
 					icms90.setvICMS(grp_icms.getIcms90().getvICMS());
 				}
 			}
@@ -1099,23 +1142,23 @@ public class ParseDocXML {
 
 		if (field.getName().equals(grp_icms.getIcmsCSOSN102_103_300_400().getReg1())) {
 
-			if (!grp_icms.getIcmsCSOSN101().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcmsCSOSN101().getCst().getCstA().isEmpty()) {
 				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN101().getCst().getCstA());
 			}
 
-			if (!grp_icms.getIcmsCSOSN101().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcmsCSOSN101().getCst().getCstB().isEmpty()) {
 				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN101().getCst().getCstB());
 
 			}
 
 			if (grp_icms.getIcmsCSOSN101().getAliqpCredSN() != null) {
-				if (!grp_icms.getIcmsCSOSN101().getAliqpCredSN().isBlank()) {
+				if (!grp_icms.getIcmsCSOSN101().getAliqpCredSN().isEmpty()) {
 					grupo.setAliqpCredSN(grp_icms.getIcmsCSOSN101().getAliqpCredSN());
 				}
 			}
 
 			if (grp_icms.getIcmsCSOSN101().getvCredICMSSN() != null) {
-				if (!grp_icms.getIcmsCSOSN101().getvCredICMSSN().isBlank()) {
+				if (!grp_icms.getIcmsCSOSN101().getvCredICMSSN().isEmpty()) {
 					grupo.setvCredICMSSN(grp_icms.getIcmsCSOSN101().getvCredICMSSN());
 				}
 			}
@@ -1130,11 +1173,11 @@ public class ParseDocXML {
 
 		if (field.getName().equals(grp_icms.getIcmsCSOSN102_103_300_400().getReg2())) {
 
-			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA().isEmpty()) {
 				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA());
 			}
 
-			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB().isEmpty()) {
 				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB());
 
 			}
@@ -1142,11 +1185,11 @@ public class ParseDocXML {
 
 		if (field.getName().equals(grp_icms.getIcmsCSOSN102_103_300_400().getReg3())) {
 
-			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA().isEmpty()) {
 				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA());
 			}
 
-			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB().isEmpty()) {
 				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB());
 
 			}
@@ -1154,11 +1197,11 @@ public class ParseDocXML {
 
 		if (field.getName().equals(grp_icms.getIcmsCSOSN102_103_300_400().getReg4())) {
 
-			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA().isEmpty()) {
 				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA());
 			}
 
-			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB().isEmpty()) {
 				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB());
 
 			}
@@ -1166,11 +1209,11 @@ public class ParseDocXML {
 
 		if (field.getName().equals(grp_icms.getIcmsCSOSN102_103_300_400().getReg5())) {
 
-			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA().isEmpty()) {
 				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstA());
 			}
 
-			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB().isEmpty()) {
 				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN102_103_300_400().getCst().getCstB());
 
 			}
@@ -1184,11 +1227,11 @@ public class ParseDocXML {
 
 		if (field.getName().equals(grp_icms.getIcmsCSOSN500().getReg())) {
 
-			if (!grp_icms.getIcmsCSOSN500().getCst().getCstA().isBlank()) {
+			if (!grp_icms.getIcmsCSOSN500().getCst().getCstA().isEmpty()) {
 				grupo.getCst().setCstA(grp_icms.getIcmsCSOSN500().getCst().getCstA());
 			}
 
-			if (!grp_icms.getIcmsCSOSN500().getCst().getCstB().isBlank()) {
+			if (!grp_icms.getIcmsCSOSN500().getCst().getCstB().isEmpty()) {
 				grupo.getCst().setCSOSN(grp_icms.getIcmsCSOSN500().getCst().getCstB());
 
 			}
