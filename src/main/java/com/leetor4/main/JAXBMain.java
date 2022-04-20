@@ -21,7 +21,7 @@ public class JAXBMain {
 		
 		File diretorio  = new File("E:\\XML");
 		Path dirDest    = Paths.get("E:\\xml-servidor");
-		String dest     = "E:\\Benelux_terceiro_202112.xlsx";
+		String dest     = "E:\\Matriz_201512_serie2.xlsx";
 		
 		ParseDocXML parse = new ParseDocXML();
 		
@@ -31,17 +31,17 @@ public class JAXBMain {
         //relacao.relacaoNotasFiscais(diretorio);
         String operacao = "S";
        
-        //relacao.exporaNotasFiscais(relacao.relacaoNotasFiscais(diretorio,operacao), workbook, sheet, dest);
+        relacao.exporaNotasFiscais(relacao.relacaoNotasFiscais(diretorio,operacao), workbook, sheet, dest);
         
         String cnpj = "";
         String codItem = "";
         String orig = "";
         String cst  = "";
         String numDoc = "";
-        String cfop = "6101";
+        String cfop = "5101";
        
          //Individual
-         relacao.getParse().filtrarNotasFiscais(diretorio, dirDest,cnpj,codItem,cfop,orig,cst,numDoc);
+         //relacao.getParse().filtrarNotasFiscais(diretorio, dirDest,cnpj,codItem,cfop,orig,cst,numDoc);
         
 //        String[] arrayString = new String[] {"7219","7224","7234","7264","7273","7282","7286","7288"};
 // 

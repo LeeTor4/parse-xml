@@ -27,15 +27,21 @@ public class ParseXMLMain {
 	
 	public static void main(String[] args) {
 		
-		  String ano = "2019";
+		  String ano = "2017";
 		  String emp = "SELLENE";
-		  String estab = "MEGADIET";
-		  String cnpj  = "05329222000419";
+		  String estab = "SAO_MATEUS";
+		  String cnpj  = "05329222000761";
+		 
+		  Path x5 =  Paths.get("E:\\EMPRESAS".concat("\\").concat(emp).concat("\\").concat(estab).concat("\\SPED").concat("\\").concat(ano).concat("\\XML").concat("\\").concat("Proprios").concat("\\").concat("\\mai"));
 		  Path x10 = Paths.get("E:\\EMPRESAS".concat("\\").concat(emp).concat("\\").concat(estab).concat("\\SPED").concat("\\").concat(ano).concat("\\XML").concat("\\out"));
 		  ParseDocXML parseDocXML = new ParseDocXML();
 		  String file = "E:\\XML";
-		  getDocumentosEletronicos(x10.toString(),parseDocXML);
-		  
+		  //getDocumentosEletronicos(x10.toString(),parseDocXML);
+		  int cont = 0;
+		  for(DocumentoFiscalEltronico lista :  getDocumentosEletronicos(x5.toString(),parseDocXML)){
+			  cont++;
+			  System.out.println(cont + "->" + lista.getIdent().getChaveeletronica());
+		  }
 		
 	}
 
